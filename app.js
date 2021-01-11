@@ -102,6 +102,7 @@ app.all('*', function (req, res, next) {
   ensureAuthenticated(req, res, next);
   //next();
 });
+//lg
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
