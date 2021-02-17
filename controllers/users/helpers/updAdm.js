@@ -27,7 +27,7 @@ exports.updAdmDel=async(req,res)=>{
         utils.logException(err,req,"updAdm.updAdmDel");
         res.json({
             success:false,
-            data:error
+            data:err
         })
     }
 }
@@ -57,7 +57,7 @@ exports.updAdmBlk=async(req,res)=>{
         utils.logException(err,req,"updAdm.updAdmBlk");
         res.json({
             success:false,
-            data:error
+            data:err
         })
     }
 }
@@ -86,7 +86,7 @@ exports.updAdmRsm=async(req,res)=>{
         utils.logException(err,req,"updAdm.updAdmRsm");
         res.json({
             success:false,
-            data:error
+            data:err
         })
     }
 }
@@ -115,7 +115,7 @@ exports.updWebBlk=async(req,res)=>{
         utils.logException(err,req,"updAdm.updWebBlk");
         res.json({
             success:false,
-            data:error
+            data:err
         })
     }
 }
@@ -144,7 +144,7 @@ exports.updWebRsm=async(req,res)=>{
         utils.logException(err,req,"updAdm.updWebRsm");
         res.json({
             success:false,
-            data:error
+            data:err
         })
     }
 }

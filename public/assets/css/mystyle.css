@@ -72,11 +72,33 @@ body {
   
 }
 
-	
+.mr45 { margin-right: 45px !important; }
+.clrred{
+	color: red;
+}
+.clrblack{
+	color: black;
+}
+.clrblue{
+	color: blue;
+}
+.clrgreen{
+	color: green;
+}
+.clrbrown{
+	color: brown;
+}
+.clrorange{
+	color: orange;
+}
+.pointer {cursor: pointer !important;}
+
 table.dataTable thead {
 	background-color: #35aa47;
 	color:white;
   }
+
+
 
 @media (max-width:979px) { 
 	.page-sidebar {

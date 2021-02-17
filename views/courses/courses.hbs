@@ -4,9 +4,9 @@
       <!-- BEGIN PAGE HEADER-->
       <div class="row-fluid">
         <div class="span12">
-          <h3 class="page-title"> Web Users <small>View/Add/Edit/Delete</small> </h3>
+          <h3 class="page-title"> Courses <small>View/Add/Edit/Delete</small> </h3>
           <ul class="breadcrumb">
-            <li> <i class="icon-user"></i> <a href="">View Users</a> </li>
+            <li> <i class="icon-user"></i> <a href="">View Courses</a> </li>
           </ul>
         </div>
       </div>
@@ -31,13 +31,16 @@
           <!-- BEGIN EXAMPLE TABLE PORTLET-->
           <div class="portlet box blue">
             <div class="portlet-title">
-              <h4><i class="icon-reorder"></i>Courses</h4>
+              <h4><i class="icon-reorder"></i>Courses  {{#ifCond crsusr '!=' -1}} {{#ifCond crsusr '==' 0}} by <strong><a href="admusersview?id={{userdata.admid}}" class="clrblue">{{userdata.username}}</a></strong> (Admin User){{else}} by <strong><a href="webusersview?id={{userdata.admid}}" class="clrblue">{{userdata.email}}</a></strong> (Web User){{/ifCond}}{{/ifCond}}</h4> 
+              {{!-- {{#ifCond userdata.username '!=' undefined }} by {{/ifCond}} --}}
               <div class="tools"> <a href="javascript:;" class="collapse"></a> </div>
             </div>
             <div class="portlet-body">
               <div class="clearfix">
-                <div class="btn-group"> <a href="coursesedit" class="btn green" title="Add"><i class="icon-plus"></i> Add New</a>  </div>
+                <div class="btn-group"> &nbsp; </div>
                 <div class="btn-group pull-right">
+                  <span class="mr45"><a href="coursesedit" class="btn green" title="Add"><i class="icon-plus"></i> Add New Course</a></span>
+                  <span class="mr45"><a href="degreesedit" class="btn green" title="Add"><i class="icon-plus"></i> Add New Degree</a></span>
                   <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i> </button>
                   <ul class="dropdown-menu">
                     <li><a href="#">Print</a></li>
@@ -52,12 +55,13 @@
                     <th class="none">Id</th>
                     <th>Name</th>
                     <th>Category</th>
-                    <th class="hidden-320">Type</th>
+                    <th class="hidden-480">Type</th>
                     <th class="hidden-480">Specification</th>
                     <th class="hidden-480">Language</th>
                     <th class="hidden-480">Country</th>
+                    <th class="hidden-480">By</th>
                     <th>Status</th>
-                    <th width="200px">Action</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -65,13 +69,15 @@
                   <tr class="" data-uid="{{item._id}}">
                     <td class="none">{{@index}}</td>
                     <td>{{item.courseName}}</td>
-                    <td>{{#if item.isDegree}}Degree{{else}}Course{{/if}}</td>
-                    <td class="hidden-320">{{item.type}}</td>
+                    <td>{{#if item.isDegree}}<span class="clrblue">Degree</span>{{else}}<span class="clrred">Course</span>{{/if}}</td>
+                    <td class="hidden-480">{{item.type}}</td>
                     <td class="hidden-480">{{item.courseSpecification}}</td>
                     <td class="hidden-480">{{item.courseLanguage}}</td>
-                    <td class="hidden-480">{{item.country}}</td>
-                    <td>{{#ifCond item.status '==' 0}}<a href="" class="suspend"><span class="label label-success">Approved</span></a>{{else}}<a href="" class="resume"><span class="label label-warning">Suspended</span></a>{{/ifCond }}</td>
-                    <td><a href="coursesview?id={{item._id}}" class="btn mini blue" title="View"><i class="icon-share"></i></a> &nbsp; <a href="coursesedit?id={{item._id}}" class="btn mini purple" title="Edit"><i class="icon-edit"></i></a> &nbsp; <a href="" class="btn mini black delete" title="Delete"><i class="icon-trash"></i></a> </td>
+                    <td class="hidden-480">{{item.courseCountry}}</td>
+                    <td class="hidden-480">{{#ifCond item.owner_type '==' 1}}<span class="clrorange">Admin</span>{{else}}<span class="clrbrown">Web</span>{{/ifCond}}</td>
+                    {{!-- <td class="hidden-480">{{#ifCond item.owner_type '==' 0}}Web{{else}}Admin{{/ifCond}}</td> --}}
+                    <td>{{#ifCond item.status '==' 0}}<a href="" class="suspend" data-toggle="tooltip" title="Approved"><span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i></span></a>{{else}}<a href="" class="resume" data-toggle="tooltip" title="Suspended"><span class="label label-warning"><i class="fa fa-pause" aria-hidden="true"></i></span></a>{{/ifCond}}</td>
+                    <td><a href="{{#if item.isDegree}}degreesview{{else}}coursesview{{/if}}?id={{item._id}}" class="btn mini blue" title="View {{#if item.isDegree}}Degree{{else}}Course{{/if}}"><i class="icon-share"></i></a> &nbsp; <a href="{{#if item.isDegree}}degreesedit{{else}}coursesedit{{/if}}?id={{item._id}}" class="btn mini purple" title="Edit {{#if item.isDegree}}Degree{{else}}Course{{/if}}"><i class="icon-edit"></i></a> &nbsp; <a href="" class="btn mini black delete" title="Delete {{#if item.isDegree}}Degree{{else}}Course{{/if}}"><i class="icon-trash"></i></a> </td>
                   </tr>
                 {{/each}}
                 </tbody>

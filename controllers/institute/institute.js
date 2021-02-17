@@ -1,5 +1,14 @@
+const {getAllInstitutes,getInstituteById,getInstitutesCount,getMoreInstitutes}=require("./helpers/getAllInstitutes");
 const {insertInstitute}=require("./helpers/insertInstitute");
+const {updInsDel, updInsBlk, updInsRsm} = require('./helpers/updInstitute');
 
 module.exports={
-    insertInstitute:insertInstitute
+    getAllInstitutes:getAllInstitutes,
+    getInstituteById:getInstituteById,
+    getInstitutesCount:getInstitutesCount,
+    getMoreInstitutes:getMoreInstitutes,
+    insertInstitute:insertInstitute,
+    updInsDel:updInsDel,
+    updInsBlk:updInsBlk,
+    updInsRsm:updInsRsm,
 }

@@ -17,6 +17,7 @@ var users = new Schema({
   updated: {type: Date},
   createdby: {type: String},  
   updatedby: {type: String},
+  type: {type: Number},
   admtype: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "roles",

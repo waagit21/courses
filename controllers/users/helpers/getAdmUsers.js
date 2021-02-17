@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const users=require('../../../models/users');
+const roles=require('../../../models/roles');
 var endecode = require('../../../config/endecode');
 var utils = require('../../../config/utils');
 var dateFormat = require("dateformat");
@@ -14,7 +15,7 @@ exports.getAdmUsers = (req,res) => users.aggregate([
         localField: "admtype",//field from the input documents
         foreignField: "_id",//field from the documents of the "from" collection
         as: "roles"// output array field
-  }}
+    }},{ $match : { type : { $gt: req.user.type } } }
   //,
   // {
   //   $project: { // add all the fields you need from the collection, if you need to omit something from the query results, just don't mention it here
@@ -47,8 +48,8 @@ exports.getAdmUsers = (req,res) => users.aggregate([
 // .then(results => ({ results }))
 // .catch(err => ({ err })); 
 
-exports.getAdmOnlyUser = (req,res) => users.findOne({_id: endecode.decryptstr(req.query.id)}).lean().then(function(doc) {
-  doc.admid = req.query.id;
+exports.getAdmOnlyUser = (req,res) => users.findOne({_id: endecode.decryptstr(req.usrid)}).lean().then(function(doc) {
+  doc.admid = req.usrid;
   doc.admtype = endecode.encryptstr(doc.admtype);
   return doc;
 }).catch(function(err) {
@@ -64,16 +65,39 @@ exports.getAdmByUsername = (req,res) => users.findOne({username: req}).lean().th
 });
 
 
-exports.getAdmCount = users.countDocuments(function(err, count){
+exports.getAdmCount = (req,res) => users.countDocuments({type : { $gt: req.user.type } }, function(err, count){
   return count;
 }).catch(function(err) {
   utils.logException(err,req,"getAdmUsers.getAdmCount");
   return null;
 });
 
+// exports.getAdmCount = users.countDocuments(function(err, count){
+//   return count;
+// }).catch(function(err) {
+//   utils.logException(err,req,"getAdmUsers.getAdmCount");
+//   return null;
+// });
 
-exports.insAdmUser = function(req,res) {
-  return new Promise((resolve, reject) => {
+var _this = this;
+exports.getUserOnlyRole = (req,res) => roles.findOne({_id: endecode.decryptstr(req.body.admtype)}).lean().then(function(doc) {
+  return doc;
+}).catch(function(err) {
+  utils.logException(err,req,"getAdmUsers.getUserOnlyRole");
+  return null;
+});
+
+exports.insAdmUser = function(req,res) {      
+  return new Promise(async(resolve, reject) =>  {
+
+    // try {
+    //   req.role = await _this.getUserOnlyRole(req,res);        
+    // }
+    // catch (err) {
+    //   utils.logException(err,req,"insAdmUser.getUserOnlyRole");  
+    // }
+    req.role = await _this.getUserOnlyRole(req,res); 
+
     let newUser = new users({
       username: req.body.username,
       password: req.body.password,
@@ -81,9 +105,10 @@ exports.insAdmUser = function(req,res) {
       email: req.body.email,
       phone: req.body.phone,
       status: req.body.status,
-      created: req.body.created,
-      createdby: req.body.createdby,
       admtype: endecode.decryptstr(req.body.admtype),
+      type: req.role.type,
+      created: req.body.created,
+      createdby: req.body.createdby,      
       createdby: req.user.username,
       created: new Date()
     });
@@ -119,7 +144,8 @@ exports.insAdmUser = function(req,res) {
 };
 
 exports.updAdmUser = function(req,res) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async(resolve, reject) => {
+    req.role = await _this.getUserOnlyRole(req,res); 
     if(req.body.password==""){
       let newUser = {
         username: req.body.username,
@@ -128,6 +154,7 @@ exports.updAdmUser = function(req,res) {
         phone: req.body.phone,
         status: req.body.status,
         admtype: endecode.decryptstr(req.body.admtype),
+        type: req.role.type,
         updatedby: req.user.username,
         updated: new Date()
       };
@@ -150,6 +177,7 @@ exports.updAdmUser = function(req,res) {
         phone: req.body.phone,
         status: req.body.status,
         admtype: endecode.decryptstr(req.body.admtype),
+        type: req.role.type,
         updatedby: req.user.username,
         updated: new Date()
       };
@@ -174,6 +202,14 @@ exports.updAdmUser = function(req,res) {
     }
   });
 };
+
+//  function getRole(req,res) {  roles.findOne({_id: endecode.decryptstr(req.body.admtype)}).lean().then(function(doc) {
+//   return doc;
+// }).catch(function(err) {
+//   utils.logException(err,req,"getUserRoles.getUserOnlyRole");
+//   return null;
+// });
+//  }
 
 // exports.updAdmUser = (req,res) => (async function(result){
 //   let newUser = new users({

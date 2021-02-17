@@ -1,0 +1,173 @@
+<style>
+  .form-horizontal .controls {
+    margin-left: 320px;
+  }
+  .form-horizontal .control-label {
+    width: 300px;
+  }
+  .form .form-actions {
+    padding-left: 330px;
+}
+</style>
+<div class="page-content"> 
+    <!-- BEGIN PAGE CONTAINER-->
+    <div class="container-fluid"> 
+      <!-- BEGIN PAGE HEADER-->
+      <div class="row-fluid">
+        <div class="span12">
+          <h3 class="page-title"> Courses <small>View/Add/Edit/Delete</small> </h3>
+          <ul class="breadcrumb">
+            <li> <i class="icon-user"></i> <a href="coursesview">View Courses</a> <span class="icon-angle-right"></span> </li>
+            <li> <a href="">{{heading}} Course
+              </a> </li>
+          </ul>
+        </div>
+      </div>
+      <!-- END PAGE HEADER--> 
+      <!-- BEGIN PAGE CONTENT-->
+      <div class="row-fluid">
+        <div class="span12"> 
+          <!-- BEGIN VALIDATION STATES-->
+          <div class="portlet box purple">
+            <div class="portlet-title">
+              <h4><i class="icon-reorder"></i>Courses</h4>
+              <div class="tools"> <a href="javascript:;" class="collapse"></a> </div>
+            </div>
+            <div class="portlet-body form">
+              <!-- BEGIN FORM-->
+              <form id="frminstitute" action="/updinstitute" class="form-horizontal" method="post" onSubmit="return Validate();">
+              <input id="dataid" name="dataid" type="hidden" value="{{data._id}}" />
+              {{!-- <input id="_id" name="_id" type="hidden" value="5fcd16d03b23b53c78d4ce44" /> --}}
+              {{#if error}}
+                  <div class="alert alert-error"><button class="close" data-dismiss="alert"></button>{{error}}</div>
+              {{/if}}
+              {{#if success}}
+                  <div class="alert alert-success"><button class="close" data-dismiss="alert"></button>{{success}}</div>
+              {{/if}}
+                <div id="dvinstituteName" class="control-group">
+                  <label class="control-label">Name<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="instituteName" name="instituteName" type="text" class="span6 m-wrap vlditm" value="{{data.instituteName}}" placeholder="Name" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstituteType" class="control-group">
+                  <label class="control-label">Type<span class="required">*</span></label>
+                  <div class="controls">
+                    <select id="instituteType" name="instituteType" class="span6 m-wrap vlditm">  
+                         <option value="University">University</option>
+                    </select>
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstitutionMode" class="control-group">
+                  <label class="control-label">Mode<span class="required">*</span></label>
+                  <div class="controls">
+                    <select id="institutionMode" name="institutionMode" class="span6 m-wrap vlditm">  
+                         <option value="Institution">Institution</option>
+                    </select>
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstituteWebAddress" class="control-group">
+                  <label class="control-label">Web Address<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="instituteWebAddress" name="instituteWebAddress" type="text" class="span6 m-wrap vlditm" value="{{data.instituteWebAddress}}" placeholder="Web Address" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstitutePhoneNumber" class="control-group">
+                  <label class="control-label">Phone Number<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="institutePhoneNumber" name="institutePhoneNumber" type="text" class="span6 m-wrap vlditm" value="{{data.institutePhoneNumber}}" placeholder="Phone Number" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstituteWhatsAppNumber" class="control-group">
+                  <label class="control-label">WhatsApp Number<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="instituteWhatsAppNumber" name="instituteWhatsAppNumber" type="text" class="span6 m-wrap vlditm" value="{{data.instituteWhatsAppNumber}}" placeholder="WhatsApp Number" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstituteEmail" class="control-group">
+                  <label class="control-label">Email<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="instituteEmail" name="instituteEmail" type="text" class="span6 m-wrap vlditm" value="{{data.instituteEmail}}" placeholder="Email" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstituteAddress" class="control-group">
+                  <label class="control-label">Address<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="instituteAddress" name="instituteAddress" type="number" class="span6 m-wrap vlditm" value="{{data.instituteAddress}}" placeholder="Address" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvimageSet" class="control-group">
+                  <label class="control-label">Image Set<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="imageSet" name="imageSet" type="text" class="span6 m-wrap vlditm" value="{{data.imageSet}}" placeholder="Image Set" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvcampuses" class="control-group">
+                  <label class="control-label">Campuses<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="campuses" name="campuses" type="text" class="span6 m-wrap vlditm" value="{{data.campuses}}" placeholder="Campuses" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvdepartment" class="control-group">
+                  <label class="control-label">Department<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="department" name="department" type="text" class="span6 m-wrap vlditm" value="{{data.department}}" placeholder="Department" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvprogram" class="control-group">
+                  <label class="control-label">Program<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="program" name="program" type="text" class="span6 m-wrap vlditm" value="{{data.program}}" placeholder="Program" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvfaculty" class="control-group">
+                  <label class="control-label">Faculty<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="faculty" name="faculty" type="text" class="span6 m-wrap vlditm" value="{{data.faculty}}" placeholder="Faculty" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvinstituteFacilitation" class="control-group">
+                  <label class="control-label">Facilitation<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="instituteFacilitation" name="instituteFacilitation" type="text" class="span6 m-wrap vlditm" value="{{data.instituteFacilitation}}" placeholder="Facilitation" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvstatus" class="control-group">
+                  <label class="control-label">Status<span class="required">*</span></label>
+                  <div class="controls">
+                    <select id="status" name="status" class="span6 m-wrap vlditm">
+                      <option value="0" {{#ifCond data.status '==' 0}} selected="selected" {{/ifCond}}>Approved</option>
+                      <option value="1" {{#ifCond data.status '==' 1}} selected="selected" {{/ifCond}}>Suspended</option>
+                    </select>
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn purple">{{heading}}</button>
+                  <button type="button" class="btn" onclick="window.location.href='admusers'">Back</button>
+                </div>
+              </form>
+              <!-- END FORM--> 
+            </div>
+          </div>
+          <!-- END VALIDATION STATES--> 
+        </div>
+      </div>
+      <!-- END PAGE CONTENT--> 
+    </div>
+    <!-- END PAGE CONTAINER--> 
+  </div>

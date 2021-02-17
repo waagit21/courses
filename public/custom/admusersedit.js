@@ -96,7 +96,7 @@ function Validate() {
 	// }
 	if (status == "") {
 		$("#dvstatus").addClass("error");
-		$("#dvstatus .help-inline").show().text("Please enter status");
+		$("#dvstatus .help-inline").show().text("Please select status");
 		chk = 1;
 	}
 
@@ -106,47 +106,4 @@ function Validate() {
 	else {
 		return true;
 	}
-}
-
-function ValidText(text,mini,maxi) {
-	if (text != '' && text != null) {
-		var strlen = text.length;
-		if (strlen < mini || strlen > maxi) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	else {
-		return true;
-	}
-}
-
-function ValidEmail(email) {
-	if (email != '' && email != null) {
-		var filter = /^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/;
-        if (filter.test(email)) {
-            return false;
-        }
-        else {
-            return true;
-        }
-	}
-	else {
-		return false;
-	}
-}
-
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-function isInt(value) {
-  return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
 }

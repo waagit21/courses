@@ -1,24 +1,43 @@
-const institute = require('../../../models/institute');
-const jwt_decode = require("jwt-decode");
-const moment = require('moment');
-exports.insertInstitute = async (req, res) => {
-  console.log('institute', req.files)
-  let pathsArr = []
-  pathsArr = req.files.map((file) => file.path)
-  try {
+const institutes=require('../../../models/institute');
+const jwt_decode=require("jwt-decode");
+const moment=require('moment');
 
-    console.log('path', pathsArr)
+
+exports.insertInstitute =  (req, res) => {
+  try {
+    //const value = jwt_decode(req.headers.authorization);
     let date = moment().unix().toString();
     req.body.creation_date = date;
-    req.body.imageSet = pathsArr
+    var que =  institutes.collection.insertOne(req.body);
+    if (que) {
+      return 1;
+    }
+    else {
+      return null;
+    }
+  } 
+  catch (err) {
+    console.log(err);
+    utils.logException(err,req,"insertInstitute.insertInstitute");
+    return null;
+  }
+}
 
-    console.log('reqBody', req.body)
-    await institute.collection.insertOne(req.body)
-    res.json({
-      success: true,
-      data: "Inserted"
-    })
-  } catch (error) {
-    console.log(error)
+exports.updateInstitute = (req, res) => {
+  try {
+    //const value = jwt_decode(req.headers.authorization);
+    let date = moment().unix().toString();
+    req.body.updation_date = date;
+    var que =  institutes.findByIdAndUpdate({_id: req.body.dataid},req.body);
+    if (que) {
+      return 1;
+    }
+    else {
+      return null;
+    }
+  } catch (err) {
+    console.log(err);
+    utils.logException(err,req,"insertInstitute.updateInstitute");
+    return null;
   }
 }

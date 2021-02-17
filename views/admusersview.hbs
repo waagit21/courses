@@ -41,7 +41,7 @@
                       <span id="suc_msg"></span> </div>
                     <!-- BEGIN FORM-->
                     <div class="form-horizontal form-view">
-                      <div class="text-right"><a href="courses" class="btn red-stripe">Courses</a> &nbsp; <a href="admusersedit?id={{data.admid}}" class="btn purple" title="Edit"><i class="icon-edit"></i> Update</a></div>
+                      <div class="text-right"><a href="courses?adm={{data.admid}}" class="btn red-stripe"><i class="icon-share"></i> Courses</a> &nbsp; <a href="admusersedit?id={{data.admid}}" class="btn purple" title="Edit"><i class="icon-edit"></i> Update</a></div>
                       <h3 class="form-section">Personal Info</h3>
                       <div class="row-fluid">
                         <div class="span6 ">
@@ -82,7 +82,7 @@
                         <div class="span6 ">
                           <div class="control-group">
                             <label class="control-label">User Status:</label>
-                            <div class="controls"> <span id="userstatus" class="text bold hand">{{#ifCond data.status '==' 0}}<a onclick="ChangeStatus('{{data.admid}}', 0)"><span class="label label-success">Approved</span></a>{{else}}<a onclick="ChangeStatus('{{data.admid}}', 1)"><span class="label label-warning">Suspended</span></a>{{/ifCond}}</span> </div>
+                            <div class="controls"> <span id="userstatus" class="text bold hand">{{#ifCond data.status '==' 0}}<a onclick="ChangeStatus('{{data.admid}}', 0)"><span class="label label-success"><i class='fa fa-check' aria-hidden='true'></i> Approved</span></a>{{else}}<a onclick="ChangeStatus('{{data.admid}}', 1)"><span class="label label-warning"><i class='fa fa-pause' aria-hidden='true'></i> Suspended</span></a>{{/ifCond}}</span> </div>
                           </div>
                         </div>
                       </div>

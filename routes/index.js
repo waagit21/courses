@@ -13,6 +13,7 @@ const { forwardAuthenticated } = require('../middleware/auth_user');
 //var fs = require('fs');
 
 var courses = require('../controllers/courses/courses');
+var institutes = require('../controllers/institute/institute');
 
 //#region Home-User
 
@@ -24,7 +25,7 @@ router.get('/', forwardAuthenticated, function(req, res, next) {
   // };
   // var myeml = eml.SendEmail(req, res, msg);
   // console.log(myeml);
-  res.render('index', { layout: 'home.hbs', custom:"index", title: 'Admin Panel' });
+  res.render('index', { title: 'Admin Panel', layout: 'home.hbs', custom:"index" });
 });
 
 
@@ -66,7 +67,7 @@ router.get('/logout', function(req, res){
 router.get('/dashboard', async function(req, res, next) {
   // console.log(req.user);
   // req.flash('user', req.user);
-  const user_count = await users.getAdmCount;
+  const user_count = await users.getAdmCount(req);
   const web_count = await users.getWebCount;
   const courses_count = await courses.getCoursesCount;
   var counts = {
@@ -74,7 +75,7 @@ router.get('/dashboard', async function(req, res, next) {
     web_count: web_count,
     courses_count: courses_count,
   };  
-  res.render('dashboard', { dashboard:true, custom:"dashboard", counts: counts, title: 'Dashboard'});
+  res.render('dashboard', { title: 'Dashboard', dashboard:true, custom:"dashboard", counts: counts});
 });
 
 router.get('/userroles', async function(req, res, next) {
@@ -83,7 +84,7 @@ router.get('/userroles', async function(req, res, next) {
   if(data === undefined || data === null || data.length === 0){
     error = "No data found";
   }
-  res.render('userroles', { userroles:true, custom:"userroles", items: data, title: 'Admin Roles', error: error});  
+  res.render('userroles', { title: 'Admin Roles', userroles:true, custom:"userroles", items: data, error: error});  
 });
 
 router.get('/admusers', async function(req, res, next) {
@@ -102,29 +103,35 @@ router.get('/admusers', async function(req, res, next) {
 
 router.get('/admusersview', async function(req, res, next) { 
   if (req.query.id !== undefined && req.query.id !== "") {
+    req.usrid = req.query.id;
     var admdata = await users.getAdmOnlyUser(req);
     var rldata = {};
     var admcrt = "";
     var admupd = "";
     var error = "";
-    if(admdata !== undefined && admdata !== null) {
-      rldata = await users.getUserOnlyRole(admdata.admtype); 
-      if(admdata.createdby != "") {
-        admcrt = await users.getAdmByUsername(admdata.createdby);
-      }
-      if(admdata.updatedby != "" ) {
-        if(admdata.updatedby==admdata.createdby) {
-          admupd = admcrt;
+    if(admdata._id==req.user.id || admdata.type > req.user.type || req.user.type == 1){
+      if(admdata !== undefined && admdata !== null) {
+        rldata = await users.getUserOnlyRole(admdata.admtype); 
+        if(admdata.createdby != "") {
+          admcrt = await users.getAdmByUsername(admdata.createdby);
         }
-        else {
-          admupd = await users.getAdmByUsername(admdata.updatedby);
-        }        
-      }     
+        if(admdata.updatedby != "" ) {
+          if(admdata.updatedby==admdata.createdby) {
+            admupd = admcrt;
+          }
+          else {
+            admupd = await users.getAdmByUsername(admdata.updatedby);
+          }        
+        }     
+      }
+      else {
+        error = "No data found"; 
+      }    
+      res.render('admusersview', { title: 'Admin Users', admusersview:true, prntadmusers:true, custom:"admusersview", data: admdata, rldata: rldata, admcrt: admcrt, admupd: admupd });
     }
-    else {
-      error = "No data found"; 
-    }    
-    res.render('admusersview', { admusersview:true, prntadmusers:true, custom:"admusersview", data: admdata, rldata: rldata, admcrt: admcrt, admupd: admupd, title: 'Admin Users' });
+    else{
+      res.redirect('/admusers');
+    }
   }
   else{
     res.redirect('/admusers');
@@ -136,11 +143,17 @@ router.get('/admusersedit', async function(req, res, next) {
   var admdata = {};
   if (req.query.id !== undefined && req.query.id !== "") {
     heading = "Update";
+    req.usrid = req.query.id;
     admdata = await users.getAdmOnlyUser(req);
+    if(admdata._id==req.user.id || admdata.type > req.user.type || req.user.type == 1){      
+    }
+    else{
+      res.redirect('/admusers');
+    }
   }
   var rldata = await users.getUserRoles; 
   if(rldata !== undefined && rldata !== null) {  
-    res.render('admusersedit', { admusersedit:true, prntadmusers:true, custom:"admusersedit", items: rldata, data: admdata, title: 'Admin Users', heading: heading});
+    res.render('admusersedit', { title: 'Admin Users', admusersedit:true, prntadmusers:true, custom:"admusersedit", items: rldata, data: admdata, heading: heading});
   }
   else {
     res.redirect('/admusers');
@@ -189,17 +202,18 @@ router.get('/webusers', async function(req, res, next) {
   if(data === undefined || data === null || data.length === 0){
     error = "No data found";
   }
-  res.render('webusers', { webusers:true, prntwebusers:true, custom:"webusers", items: data, title: 'Web Users', error: error});
+  res.render('webusers', { title: 'Web Users', webusers:true, prntwebusers:true, custom:"webusers", items: data, error: error});
 });
 
 router.get('/webusersview', async function(req, res, next) { 
   if (req.query.id !== undefined && req.query.id !== "") {
     var error = "";
+    req.usrid = req.query.id;
     var webdata = await users.getWebOnlyUser(req);
     if(webdata === undefined || webdata === null || webdata.length === 0){
       error = "No data found";
     }
-    res.render('webusersview', { webusersview:true, prntwebusers:true, custom:"webusersview", data: webdata, title: 'Web Users', error: error });
+    res.render('webusersview', { title: 'Web Users', webusersview:true, prntwebusers:true, custom:"webusersview", data: webdata, error: error });
   }
   else{
     res.redirect('/webusers');
@@ -211,21 +225,203 @@ router.get('/webusersview', async function(req, res, next) {
 //#region Course
 router.get('/courses', async function(req, res, next) { 
   var data = {};
+  var userdata = {};
+  var crsusr = -1;
   data = await courses.getAllCourses(req, res);
+  //courses.updAllCourses(req, res); 
+  //console.log(data);
+  var error = 0;
+   if(data === undefined || data === null || data.length === 0){
+    error = "No data found";
+  }
+
+  if (req.query.adm !== undefined && req.query.adm !== "") {
+    crsusr = 0;
+    req.usrid = req.query.adm;
+    userdata = await users.getAdmOnlyUser(req);
+  }
+  else if (req.query.web !== undefined && req.query.web !== "") {
+    crsusr = 1;
+    req.usrid = req.query.web;
+    userdata = await users.getWebOnlyUser(req);
+  }
+  
+  res.render('courses/courses', { title: 'Courses', courses:true, prntcourses:true, custom:"courses/courses", items: data, userdata:userdata, crsusr:crsusr, error: error});
+});
+router.get('/coursesview', async function(req, res, next) { 
+  if (req.query.id !== undefined && req.query.id !== "") {
+    var error = "";
+    var crsdata = await courses.getCourseById(req);
+    if(crsdata === undefined || crsdata === null || crsdata.length === 0){
+      error = "No data found";
+    }
+    res.render('courses/coursesview', { title: 'Course View', coursesview:true, prntcourses:true, custom:"courses/coursesview", data: crsdata, error: error });
+  }
+  else{
+    res.redirect('/courses');
+  }
+});
+router.get('/coursesedit', async function(req, res, next) { 
+  var heading = "Add";
+  var crsdata = {};
+  if (req.query.id !== undefined && req.query.id !== "") {
+    heading = "Update";
+    crsdata = await courses.getCourseById(req);    
+  }
+  res.render('courses/coursesedit', { title: 'Course Add/Update', coursesedit:true, prntcourses:true, custom:"courses/coursesedit", data: crsdata, heading: heading});
+});
+router.get('/degreesview', async function(req, res, next) { 
+  if (req.query.id !== undefined && req.query.id !== "") {
+    var error = "";
+    var crsdata = await courses.getCourseById(req);
+    if(crsdata === undefined || crsdata === null || crsdata.length === 0){
+      error = "No data found";
+    }
+    res.render('courses/degreesview', { title: 'Degree View', degreesview:true, prntcourses:true, custom:"courses/degreesview", data: crsdata, error: error });
+  }
+  else{
+    res.redirect('/courses');
+  }
+});
+router.get('/degreesedit', async function(req, res, next) { 
+  var heading = "Add";
+  var crsdata = {};
+  if (req.query.id !== undefined && req.query.id !== "") {
+    heading = "Update";
+    crsdata = await courses.getCourseById(req);    
+  }
+  res.render('courses/degreesedit', { title: 'Degree Add/Update', degreesedit:true, prntcourses:true, custom:"courses/degreesedit", data: crsdata, heading: heading});
+});
+router.post('/updcourse', async function(req, res, next) {
+  //req.body._id = mongoose.Types.ObjectId(req.body._id);
+  //var date = functions.formatDateTime(Date.now());
+  //date = date.toDateString();
+  var val =0;
+  var data = {}; 
+  try {
+    if(req.body.dataid!="" && req.body.dataid!=null){
+      val=1;
+      data = await courses.updateCourse(req);
+    }
+    else{
+      data = await courses.insertCourse(req);
+    }
+    if(data!==undefined && data!=null && data!="") {
+      var msg = (val==0) ? "Course added successfull" : "Course updated successfull";
+      req.flash('success', msg);
+      res.redirect('back');
+    }
+    else {
+      var msg = (val==0) ? "Course did not added" : "Course did not updated";
+      req.flash('error', msg);
+      res.redirect('back');
+    }
+  }
+  catch (err){
+    console.log(err);
+    utils.logException(err,req,"updcourse");
+  }
+  
+});
+router.post('/upddegree', async function(req, res, next) {
+  //req.body._id = mongoose.Types.ObjectId(req.body._id);
+  //var date = functions.formatDateTime(Date.now());
+  //date = date.toDateString();
+  var val =0;
+  var data = {}; 
+  try {
+    if(req.body.dataid!="" && req.body.dataid!=null){
+      val=1;
+      data = await courses.updateDegree(req);
+    }
+    else{
+      data = await courses.insertDegree(req);
+    }
+    if(data!==undefined && data!=null && data!="") {
+      var msg = (val==0) ? "Degree added successfull" : "Degree updated successfull";
+      req.flash('success', msg);
+      res.redirect('back');
+    }
+    else {
+      var msg = (val==0) ? "Degree did not added" : "Degree did not updated";
+      req.flash('error', msg);
+      res.redirect('back');
+    }
+  }
+  catch (err){
+    console.log(err);
+    utils.logException(err,req,"upddegree");
+  }
+  
+});
+//#endregion Course
+
+//#region Institute
+router.get('/institutes', async function(req, res, next) { 
+  var data = {};
+  data = await institutes.getAllInstitutes(req, res);
   //console.log(data);
   var error = "";
   if(data === undefined || data === null || data.length === 0){
     error = "No data found";
   }
-  res.render('courses/courses', { courses:true, prntcourses:true, custom:"courses", items: data, title: 'Courses', error: error});
+  res.render('institutes/institutes', { title: 'Institutes', institutes:true, prntinstitutes:true, custom:"institutes/institutes", items: data, error: error});
 });
-router.get('/coursesview', async function(req, res, next) { 
-  res.render('courses/coursesview', { coursesview:true, prntcourses:true, prntcoursesview:true, custom:"courses", title: 'Courses'});
+router.get('/institutesview', async function(req, res, next) { 
+  if (req.query.id !== undefined && req.query.id !== "") {
+    var error = "";
+    var crsdata = await institutes.getInstituteById(req);
+    if(crsdata === undefined || crsdata === null || crsdata.length === 0){
+      error = "No data found";
+    }
+    res.render('institutes/institutesview', { title: 'Institute View', institutesview:true, prntinstitutes:true, custom:"institutes/institutesview", data: crsdata, error: error });
+  }
+  else{
+    res.redirect('/courses');
+  }
 });
-router.get('/coursesedit', async function(req, res, next) { 
-  res.render('courses/coursesedit', { coursesedit:true, prntcourses:true, prntcoursesedit:true, custom:"courses", title: 'Courses'});
+router.get('/institutesedit', async function(req, res, next) { 
+  var heading = "Add";
+  var crsdata = {};
+  if (req.query.id !== undefined && req.query.id !== "") {
+    heading = "Update";
+    crsdata = await courses.getInstituteById(req);    
+  }
+  res.render('institutes/institutesedit', { title: 'Institute Add/Update', institutesedit:true, prntinstitutes:true, custom:"institutes/institutesedit", data: crsdata, heading: heading});
 });
-//#endregion Course
+router.post('/updinstitute', async function(req, res, next) {
+  //req.body._id = mongoose.Types.ObjectId(req.body._id);
+  //var date = functions.formatDateTime(Date.now());
+  //date = date.toDateString();
+  var val =0;
+  var data = {}; 
+  try {
+    if(req.body._id!="" && req.body._id!=null){
+      val=1;
+      data = await institutes.updateInstitute(req);
+    }
+    else{
+      data = await institutes.insertInstitute(req);
+    }
+    if(data!==undefined && data!=null && data!="") {
+      var msg = (val==0) ? "Institute added successfull" : "Institute updated successfull";
+      req.flash('success', msg);
+      res.redirect('back');
+    }
+    else {
+      var msg = (val==0) ? "Institute did not added" : "Institute did not updated";
+      req.flash('error', msg);
+      res.redirect('back');
+    }
+  }
+  catch (err){
+    console.log(err);
+    utils.logException(err,req,"updinstitute");
+  }
+  
+});
+//#endregion Institute
+
 
 module.exports = router;
 

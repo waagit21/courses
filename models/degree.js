@@ -3,43 +3,50 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var degree = new Schema({
-    AdditionalSubject1: String,
-    AdditionalSubject2: String,
-    AdditionalSubject3: String,
-    AppDeadline: String,
-    MainDisciplinary: String,
-    breakDown: String,
-    city: String,
-    compulsory: Array,
-    country: String,
-    course: Array,
-    currency: String,
-    degreeContent: String,
-    degreeName: String,
-    degreeOfferingInstitute: String,
+
+    courseName: String,
+    courseSpecification: String,
+    type: String,
     degreeOverview: String,
-    degreeType: String,
-    durationCrit: String,
-    durationfrom: String,
-    facName: String,
+    degreeContent: String,
+    totalNumberCourses: String,
+    course: Array,
+    totalCourses: String,
+    online: Array,
+    offlinetotal: String,
+    offline: Array,    
+    facultyName: String,//facName. Made common in both
+    //facultyInfo: Array,
+    facultyResume: Array,
+    courseLanguage: String,
+    courseCountry: String,
+    courseCity: String,
+    compulsory: Array,
+    optional: Array,
+    courseOfferingInstitute: String,
+    instituteWebAddress: String,//webaddress. Made common in both
+    instituteDetails: String,//instDetails. Made common in both
+    medium: String,//teachingmedium. Made common in both
+    mediumWebAddress: String,//teachingmediumweb. Made common in both
+    mediumDetails: String,//inssdetails. Made common in both
+    duration: String,
+    durationFor: String,//durationCrit. Made common in both
+    hoursPerWeek: String,
+    totalCost : String,
+    currency: String,
+    breakDown: String,//Made common in both
     financialAid: String,
     financialAidDetails: String,
-    hoursPerWeek: String,
-    inssdetails: String,
-    instDetails: String,
-    offline: Array,
-    offlinetotal: String,
-    online: Array,
-    optional: Array,
-    startingdate: String,
-    teachingmedium: String,
-    teachingmediumweb: String,
-    totalCost: String,
-    totalCourses: String,
-    totalNumberCourses: String,
-    type: String,
-    webaddress: String,
-})
+    startingDate: String,//startingdate. Made common in both
+    endingDate: String,
+    //mainSubject: String,
+    creation_date: String,
+    isDegree: Boolean,
+    status: Number,//New added for admin, in insertion please send value 1.
+    owner_type: Number,//New added for admin, in insertion please send value 0.
+    owner_id:String//Changed to ObjectId in database.
+    
+}, {collection: 'courses'});
 
 module.exports = mongoose.model('degree', degree);
 

@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 
 var roles = new Schema({
   //_id:mongoose.Schema.Types.ObjectId,
+  type: Number,
   name: String,
   roles: String,
   color: String,

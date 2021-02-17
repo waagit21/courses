@@ -1,4 +1,4 @@
-var oTable = $('#admusers').dataTable();
+var oTable = $('#admusers').dataTable( {"sPaginationType": "full_numbers"} );
 jQuery('#admusers_wrapper .dataTables_filter input').addClass("m-wrap medium"); // modify table search input
 jQuery('#admusers_wrapper .dataTables_length select').addClass("m-wrap xsmall"); // modify table per page dropdown
 
@@ -50,7 +50,7 @@ $('#admusers a.suspend').live('click', function (e) {
 		dataType:"json",
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
-				$link.html("<span class='label label-warning'>Suspended</span>");
+				$link.html("<span class='label label-warning'><i class='fa fa-pause' aria-hidden='true'></i> </span>");
 				$link.closest('a').removeClass('suspend').addClass('resume');
 				$('#suc_msg').parents().removeClass('hide');
 				$('#suc_msg').text("Blocked Successfully");
@@ -83,7 +83,7 @@ $('#admusers a.resume').live('click', function (e) {
 		dataType:"json",
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
-				$link.html("<span class='label label-success'>Approved</span>");
+				$link.html("<span class='label label-success'><i class='fa fa-check' aria-hidden='true'></i> </span>");
 				$link.closest('a').removeClass('resume').addClass('suspend');
 				$('#suc_msg').parents().removeClass('hide');
 				$('#suc_msg').text("Resumed Successfully");

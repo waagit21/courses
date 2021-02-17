@@ -14,6 +14,13 @@ exports.getUserRoles = roles.find().lean().then(function(doc) {
   return null;
 });
 
+// exports.getUserOnlyRole = (req,res) => roles.findOne({_id: endecode.decryptstr(req)}).lean().then(function(doc) {
+//   return doc;
+// }).catch(function(err) {
+//   utils.logException(err,req,"getUserRoles.getUserOnlyRole");
+//   return null;
+// });
+
 exports.getUserOnlyRole = (req,res) => roles.findOne({_id: endecode.decryptstr(req)}).lean().then(function(doc) {
   return doc;
 }).catch(function(err) {

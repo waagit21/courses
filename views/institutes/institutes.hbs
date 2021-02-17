@@ -1,3 +1,4 @@
+{{!-- <link href="https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables_themeroller.css" rel="stylesheet" /> --}}
 <div class="page-content"> 
     <!-- BEGIN PAGE CONTAINER-->
     <div class="container-fluid"> 
@@ -31,13 +32,14 @@
           <!-- BEGIN EXAMPLE TABLE PORTLET-->
           <div class="portlet box blue">
             <div class="portlet-title">
-              <h4><i class="icon-reorder"></i>Web Users</h4>
+              <h4><i class="icon-reorder"></i>Institutes</h4>
               <div class="tools"> <a href="javascript:;" class="collapse"></a> </div>
             </div>
             <div class="portlet-body">
               <div class="clearfix">
-                <div class="btn-group"> </div>
+                <div class="btn-group">Showing 100 of 1000 <button type="button" onclick="GetMore()" class="btn purple">Load More</button> </div>
                 <div class="btn-group pull-right">
+                  <span class="mr45"><a href="institutesedit" class="btn green" title="Add"><i class="icon-plus"></i> Add New</a></span>
                   <button class="btn dropdown-toggle" data-toggle="dropdown">Tools <i class="icon-angle-down"></i> </button>
                   <ul class="dropdown-menu">
                     <li><a href="#">Print</a></li>
@@ -46,26 +48,28 @@
                   </ul>
                 </div>
               </div>
-              <table class="table table-striped table-hover table-bordered" id="webusers">
+              <table class="table table-striped table-hover table-bordered" id="institutes">
                 <thead>
                   <tr>
-                    <th class="none">Id</th>
-                    <th class="hidden-320">Name</th>
-                    <th class="hidden-480">Email</th>
-                    <th class="hidden-480">Date Time</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th class="hidden-480">Type</th>
+                    <th class="hidden-480">Mode</th>
+                    <th class="hidden-480">Date</th>
                     <th>Status</th>
-                    <th width="200px">Action</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                 {{#each items as |item|}}  
-                  <tr class="" data-uid="{{item.webid}}">
-                    <td class="none">{{@index}}</td>
-                    <td class="hidden-320">{{item.name}}</td>
-                    <td class="hidden-480"><a href="mailto:{{item.email}}">{{item.email}}</a></td>
+                  <tr class="" data-uid="{{item._id}}">
+                    <td>{{@index}}</td>
+                    <td>{{item.instituteName}}</td>
+                    <td class="hidden-480">{{item.instituteType}}</td>
+                    <td class="hidden-480">{{item.institutionMode}}</td>
                     <td class="hidden-480">{{item.creation_date}}</td>
                     <td>{{#ifCond item.status '==' 0}}<a href="" class="suspend" data-toggle="tooltip" title="Approved"><span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i></span></a>{{else}}<a href="" class="resume" data-toggle="tooltip" title="Suspended"><span class="label label-warning"><i class="fa fa-pause" aria-hidden="true"></i></span></a>{{/ifCond }}</td>
-                    <td><a href="webusersview?id={{item.webid}}" class="btn mini blue" title="View"><i class="icon-share"></i></a> &nbsp; <a href="courses?web={{item.webid}}" class="btn mini red-stripe"><i class="fa fa-graduation-cap" aria-hidden="true"></i></a></td>
+                    <td><a href="institutesview?id={{item._id}}" class="btn mini blue" title="View Institute"><i class="icon-share"></i></a> &nbsp; <a href="institutesedit?id={{item._id}}" class="btn mini purple" title="Edit Institute"><i class="icon-edit"></i></a> &nbsp; <a href="" class="btn mini black delete" title="Delete Institute"><i class="icon-trash"></i></a> </td>
                   </tr>
                 {{/each}}
                 </tbody>

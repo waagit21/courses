@@ -35,7 +35,7 @@
             </div>
             <div class="portlet-body form">
               <!-- BEGIN FORM-->
-              <form id="frmcourse" action="/updcourse" class="form-horizontal" method="post" onSubmit="return Validate();">
+              <form id="frmdegree" action="/upddegree" class="form-horizontal" method="post" onSubmit="return Validate();">
               <input id="dataid" name="dataid" type="hidden" value="{{data._id}}" />
               {{!-- <input id="_id" name="_id" type="hidden" value="5fcd16d03b23b53c78d4ce44" /> --}}
               {{#if error}}
@@ -45,14 +45,14 @@
                   <div class="alert alert-success"><button class="close" data-dismiss="alert"></button>{{success}}</div>
               {{/if}}
                 <div id="dvcourseName" class="control-group">
-                  <label class="control-label">Course Name<span class="required">*</span></label>
+                  <label class="control-label">Degree Name<span class="required">*</span></label>
                   <div class="controls">
                     <input id="courseName" name="courseName" type="text" class="span6 m-wrap vlditm" value="{{data.courseName}}" placeholder="Degree Name" />
                     <span class="help-inline"></span>
                   </div>
                 </div>
                 <div id="dvcourseSpecification" class="control-group">
-                  <label class="control-label">Course Specification<span class="required">*</span></label>
+                  <label class="control-label">Degree Specification<span class="required">*</span></label>
                   <div class="controls">
                     <select id="courseSpecification" name="courseSpecification" class="span6 m-wrap vlditm">  
                          <option value="Certificate">Certificate</option>
@@ -62,7 +62,7 @@
                   </div>
                 </div>
                 <div id="dvtype" class="control-group">
-                  <label class="control-label">Select Course Type<span class="required">*</span></label>
+                  <label class="control-label">Select Degree Type<span class="required">*</span></label>
                   <div class="controls">
                     <select id="type" name="type" class="span6 m-wrap vlditm">  
                          <option value="Disciplinary">Disciplinary Course</option>
@@ -71,30 +71,62 @@
                     <span class="help-inline"></span>
                   </div>
                 </div>
-                <div id="dvmode" class="control-group">
-                  <label class="control-label">Select Mode<span class="required">*</span></label>
+                <div id="dvdegreeOverview" class="control-group">
+                  <label class="control-label">Degree Importance/Overview<span class="required">*</span></label>
                   <div class="controls">
-                    <select id="mode" name="mode" class="span6 m-wrap vlditm">  
-                         <option value="Online">Online</option>
-                         <option value="Offline">Offline</option>
-                    </select>
+                    <textarea id="degreeOverview" name="degreeOverview" class="span6 m-wrap vlditm" rows="5" placeholder="Degree Importance/Overview">{{data.degreeOverview}}</textarea>
                     <span class="help-inline"></span>
                   </div>
                 </div>
-                <div id="dvcourseLanguage" class="control-group">
-                  <label class="control-label">Language<span class="required">*</span></label>
+                <div id="dvdegreeContent" class="control-group">
+                  <label class="control-label">Degree Content<span class="required">*</span></label>
                   <div class="controls">
-                    <input id="courseLanguage" name="courseLanguage" type="text" class="span6 m-wrap vlditm" value="{{data.courseLanguage}}" placeholder="Language" />
+                    <textarea id="degreeContent" name="degreeContent" class="span6 m-wrap vlditm" rows="5" placeholder="Degree Content">{{data.degreeContent}}</textarea>
                     <span class="help-inline"></span>
                   </div>
                 </div>
-                <div id="dvcourseBreakDown" class="control-group">
-                  <label class="control-label">Course Importance & Breakdown<span class="required">*</span></label>
+                <div id="dvtotalNumberCourses" class="control-group">
+                  <label class="control-label">Total Number of Courses<span class="required">*</span></label>
                   <div class="controls">
-                    <textarea id="courseBreakDown" name="courseBreakDown" class="span6 m-wrap vlditm" rows="5" placeholder="Course Importance & Breakdown">{{data.courseBreakDown}}</textarea>
+                    <input id="totalNumberCourses" name="totalNumberCourses" type="number" class="span6 m-wrap vlditm" value="{{data.totalNumberCourses}}" placeholder="Total Number of Courses" />
                     <span class="help-inline"></span>
                   </div>
-                </div>                
+                </div>
+                <div id="dvcourse" class="control-group">
+                  <label class="control-label">Course Name<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="course" name="course" type="text" class="span6 m-wrap vlditm" value="{{data.course}}" placeholder="Course Name" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvtotalCourses" class="control-group">
+                  <label class="control-label">Total Number of Online Courses<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="totalCourses" name="totalCourses" type="number" class="span6 m-wrap vlditm" value="{{data.totalCourses}}" placeholder="Total Number of Online Courses" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvonline" class="control-group">
+                  <label class="control-label">Online Course Name<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="online" name="online" type="text" class="span6 m-wrap vlditm" value="{{data.online}}" placeholder="Online Course Name" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvofflinetotal" class="control-group">
+                  <label class="control-label">Total Number of Offline Courses<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="offlinetotal" name="offlinetotal" type="number" class="span6 m-wrap vlditm" value="{{data.offlinetotal}}" placeholder="Total Number of Offline Courses" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvoffline" class="control-group">
+                  <label class="control-label">Offline Course Name<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="offline" name="offline" type="text" class="span6 m-wrap vlditm" value="{{data.offline}}" placeholder="Offline Course Name" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
                 <div id="dvfacultyName" class="control-group">
                   <label class="control-label">Faculty Name<span class="required">*</span></label>
                   <div class="controls">
@@ -109,8 +141,43 @@
                     <span class="help-inline"></span>
                   </div>
                 </div>
+                <div id="dvcourseLanguage" class="control-group">
+                  <label class="control-label">Language<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="courseLanguage" name="courseLanguage" type="text" class="span6 m-wrap vlditm" value="{{data.courseLanguage}}" placeholder="Language" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvcourseCountry" class="control-group">
+                  <label class="control-label">Course Country<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="courseCountry" name="courseCountry" type="text" class="span6 m-wrap vlditm" value="{{data.courseCountry}}" placeholder="Course Country" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvcourseCity" class="control-group">
+                  <label class="control-label">Course City<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="courseCity" name="courseCity" type="text" class="span6 m-wrap vlditm" value="{{data.courseCity}}" placeholder="City" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvcompulsory" class="control-group">
+                  <label class="control-label">List of Compulsory Subjects<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="compulsory" name="compulsory" type="text" class="span6 m-wrap vlditm" value="{{data.compulsory}}" placeholder="List of Compulsory Subjects" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
+                <div id="dvoptional" class="control-group">
+                  <label class="control-label">List of Optional Subjects<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="optional" name="optional" type="text" class="span6 m-wrap vlditm" value="{{data.optional}}" placeholder="List of Optional Subjects" />
+                    <span class="help-inline"></span>
+                  </div>
+                </div>
                 <div id="dvcourseOfferingInstitute" class="control-group">
-                  <label class="control-label">Course Offering Institute<span class="required">*</span></label>
+                  <label class="control-label">Degree Offering Institute<span class="required">*</span></label>
                   <div class="controls">
                     <input id="courseOfferingInstitute" name="courseOfferingInstitute" type="text" class="span6 m-wrap vlditm" value="{{data.courseOfferingInstitute}}" placeholder="Degree Offering Institute" />
                     <span class="help-inline"></span>
@@ -148,20 +215,6 @@
                   <label class="control-label">Teaching Institute Details<span class="required">*</span></label>
                   <div class="controls">
                     <textarea id="mediumDetails" name="mediumDetails" class="span6 m-wrap vlditm" rows="5" placeholder="Teaching Institute Details">{{data.mediumDetails}}</textarea>
-                    <span class="help-inline"></span>
-                  </div>
-                </div>
-                <div id="dvcourseCountry" class="control-group">
-                  <label class="control-label">Course Country<span class="required">*</span></label>
-                  <div class="controls">
-                    <input id="courseCountry" name="courseCountry" type="text" class="span6 m-wrap vlditm" value="{{data.courseCountry}}" placeholder="Course Country" />
-                    <span class="help-inline"></span>
-                  </div>
-                </div>
-                <div id="dvcourseCity" class="control-group">
-                  <label class="control-label">Course City<span class="required">*</span></label>
-                  <div class="controls">
-                    <input id="courseCity" name="courseCity" type="text" class="span6 m-wrap vlditm" value="{{data.courseCity}}" placeholder="City" />
                     <span class="help-inline"></span>
                   </div>
                 </div>
@@ -204,13 +257,13 @@
                     <span class="help-inline"></span>
                   </div>
                 </div>
-                {{!-- <div id="dvbreakDown" class="control-group">
+                <div id="dvbreakDown" class="control-group">
                   <label class="control-label">Cost Breakdown<span class="required">*</span></label>
                   <div class="controls">
                     <textarea id="breakDown" name="breakDown" class="span6 m-wrap vlditm" rows="5" placeholder="Cost Breakdown">{{data.breakDown}}</textarea>
                     <span class="help-inline"></span>
                   </div>
-                </div> --}}
+                </div>
                 <div id="dvfinancialAid" class="control-group">
                   <label class="control-label">Financial Aid<span class="required">*</span></label>
                   <div class="controls">
@@ -239,37 +292,7 @@
                     <span class="help-inline"></span>
                   </div>
                 </div>
-                <div id="dvpart" class="control-group">
-                  <label class="control-label">Is this course is a part of any other program/degree ?<span class="required">*</span></label>
-                  <div class="controls">
-                    <select id="part" name="part" class="span6 m-wrap vlditm">  
-                         <option value="No">No</option>
-                         <option value="Yes">Yes</option>
-                    </select>
-                    <span class="help-inline"></span>
-                  </div>
-                </div>
-                <div id="dvprogramSpecs" class="control-group">
-                  <label class="control-label">Program Specification<span class="required">*</span></label>
-                  <div class="controls">
-                    <input id="programSpecs" name="programSpecs" type="text" class="span6 m-wrap vlditm" value="{{data.programSpecs}}" placeholder="Program Specification" />
-                    <span class="help-inline"></span>
-                  </div>
-                </div>
-                <div id="dvprogramName" class="control-group">
-                  <label class="control-label">Program Name<span class="required">*</span></label>
-                  <div class="controls">
-                    <input id="programName" name="programName" type="text" class="span6 m-wrap vlditm" value="{{data.programName}}" placeholder="Program Name" />
-                    <span class="help-inline"></span>
-                  </div>
-                </div>
-                <div id="dvprogramType" class="control-group">
-                  <label class="control-label">Program Type<span class="required">*</span></label>
-                  <div class="controls">
-                    <input id="programType" name="programType" type="text" class="span6 m-wrap vlditm" value="{{data.programType}}" placeholder="Program Type" />
-                    <span class="help-inline"></span>
-                  </div>
-                </div>                
+                
                 <div id="dvstatus" class="control-group">
                   <label class="control-label">Status<span class="required">*</span></label>
                   <div class="controls">

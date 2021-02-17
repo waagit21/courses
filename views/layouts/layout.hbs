@@ -15,6 +15,7 @@
 <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
 <link href="assets/bootstrap-fileupload/bootstrap-fileupload.css" rel="stylesheet" />
 <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
 <link href="assets/css/style.css" rel="stylesheet" />
 <link href="assets/css/style_responsive.css" rel="stylesheet" />
 <link href="assets/css/style_default.css" rel="stylesheet"  />
@@ -30,6 +31,7 @@
 <link rel="stylesheet" href="assets/data-tables/DT_bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="assets/bootstrap-daterangepicker/daterangepicker.css" />
 <link rel="stylesheet" type="text/css" href="assets/uniform/css/uniform.default.css" />
+<link rel="stylesheet" href="assets/data-tables/themeroller.css" />
 <link href="assets/css/mystyle.css" rel="stylesheet" />
 <link rel="shortcut icon" href="assets/favicon.ico" />
 </head>
@@ -86,29 +88,39 @@
 
         <li class="start {{#if dashboard }}active{{/if}}"> <a href="dashboard"> <i class="icon-home"></i> <span class="title">Dashboard</span> <span class="{{#if dashboard }}selected{{/if}}"></span> </a> </li>
 
+        {{#ifCond user.type '==' 1}}
         <li class="start {{#if userroles }}active{{/if}}"> <a href="userroles"> <i class="icon-th-list"></i> <span class="title">Users Roles</span> <span class="{{#if userroles }}selected{{/if}}"></span> </a> </li>
-
+        {{/ifCond}}
+        {{#ifCond user.type '<' 4}}
         <li class="has-sub {{#if prntadmusers }}active{{/if}}"> <a href="javascript:;"> <i class="icon-user"></i> <span class="title">Admin Users</span> <span class="{{#if prntadmusers }}selected{{/if}}"></span> <span class="{{#if prntadmusers }}arrow open{{else}}arrow{{/if}}"></span> </a>
-        <ul class="sub">
-            <li class="{{#if admusers }}active{{/if}}"><a href="admusers">View All Users</a></li>
-            <li class="{{#if admusersview }}active{{/if}}"><a>View User</a></li>
-            <li class="{{#if admusersedit }}active{{/if}}"><a href="admusersedit">Add / Edit User</a></li>
-        </ul>
+          <ul class="sub">
+              <li class="{{#if admusers }}active{{/if}}"><a href="admusers">View All Users</a></li>
+              <li class="{{#if admusersview }}active{{/if}}"><a>View User</a></li>
+              <li class="{{#if admusersedit }}active{{/if}}"><a href="admusersedit">Add / Edit User</a></li>
+          </ul>
         </li>
-         <li class="has-sub {{#if prntwebusers }}active{{/if}}"> <a href="javascript:;"> <i class="icon-user"></i> <span class="title">Web Users</span> <span class="{{#if prntwebusers }}selected{{/if}}"></span> <span class="{{#if prntwebusers }}arrow open{{else}}arrow{{/if}}"></span> </a>
-        <ul class="sub">
-            <li class="{{#if webusers }}active{{/if}}"><a href="webusers">View All Users</a></li>
-            <li class="{{#if webusersview }}active{{/if}}"><a>View User</a></li>
-        </ul>
+        <li class="has-sub {{#if prntwebusers }}active{{/if}}"> <a href="javascript:;"> <i class="icon-user"></i> <span class="title">Web Users</span> <span class="{{#if prntwebusers }}selected{{/if}}"></span> <span class="{{#if prntwebusers }}arrow open{{else}}arrow{{/if}}"></span> </a>
+          <ul class="sub">
+              <li class="{{#if webusers }}active{{/if}}"><a href="webusers">View All Users</a></li>
+              <li class="{{#if webusersview }}active{{/if}}"><a>View User</a></li>
+          </ul>
         </li>
-
-
-         <li class="has-sub {{#if prntcourses }}active{{/if}}"> <a href="javascript:;"> <i class="icon-user"></i> <span class="title">Courses</span> <span class="{{#if prntcourses }}selected{{/if}}"></span> <span class="{{#if prntcourses }}arrow open{{else}}arrow{{/if}}"></span> </a>
-        <ul class="sub">
-            <li class="{{#if courses }}active{{/if}}"><a href="courses">View All Courses</a></li>
-            <li class="{{#if coursesview }}active{{/if}}"><a>View Course</a></li>
-            <li class="{{#if coursesedit }}active{{/if}}"><a href="coursesedit">Add / Edit Course</a></li>
-        </ul>
+        {{/ifCond}}
+        <li class="has-sub {{#if prntcourses }}active{{/if}}"> <a href="javascript:;"> <i class="icon-user"></i> <span class="title">Courses</span> <span class="{{#if prntcourses }}selected{{/if}}"></span> <span class="{{#if prntcourses }}arrow open{{else}}arrow{{/if}}"></span> </a>
+          <ul class="sub">
+              <li class="{{#if courses }}active{{/if}}"><a href="courses">View All Degrees/Courses</a></li>
+              <li class="{{#if degreesview }}active{{/if}}"><a>View Degree</a></li>
+              <li class="{{#if coursesview }}active{{/if}}"><a>View Course</a></li>
+              <li class="{{#if degreesedit }}active{{/if}}"><a href="degreesedit">Add / Edit Degree</a></li>
+              <li class="{{#if coursesedit }}active{{/if}}"><a href="coursesedit">Add / Edit Course</a></li>
+          </ul>
+        </li>
+        <li class="has-sub {{#if prntinstitutes }}active{{/if}}"> <a href="javascript:;"> <i class="icon-user"></i> <span class="title">Institutes</span> <span class="{{#if prntinstitutes }}selected{{/if}}"></span> <span class="{{#if prntinstitutes }}arrow open{{else}}arrow{{/if}}"></span> </a>
+          <ul class="sub">
+              <li class="{{#if institutes }}active{{/if}}"><a href="institutes">View All Institutes</a></li>
+              <li class="{{#if institutesview }}active{{/if}}"><a>View Institute</a></li>
+              <li class="{{#if institutesedit }}active{{/if}}"><a href="institutesedit">Add / Edit Institute</a></li>
+          </ul>
         </li>
 
         {{!--<li class="has-sub <?php echo preg_match("/course/", $pgname) ? "active" : "" ?>"> <a href="javascript:;"> <i class="icon-bookmark"></i> <span class="title">Courses</span> <span class="<?php echo preg_match("/course/", $pgname) ? "selected" : "" ?>"></span> <span class="<?php echo preg_match("/course/", $pgname) ? "arrow open" : "arrow" ?>"></span> </a>
@@ -167,6 +179,8 @@
 {{#ifCond custom '!=' ""}}
 <script type="text/javascript" src="custom/{{custom}}.js"></script>
 {{/ifCond}}
+<script src="assets/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="custom/app.js"></script>
 <!-- END JAVASCRIPTS -->
 </body><!-- END BODY -->
 </html>

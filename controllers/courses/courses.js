@@ -1,22 +1,25 @@
 const {getCourses}=require('./helpers/getCourses'),
-{insertCourses}=require("./helpers/insertCourse"),
-{getAllCourses,updAllCourses,getCoursesCount}=require('./helpers/getAllCourses'),
-{insertDegree}=require("./helpers/insertDegree")
-const { navbarSearch } = require('./helpers/navbarSearch')
+{insertCourse, updateCourse, insertDegree, updateDegree}=require("./helpers/insertCourse"),
+{getAllCourses,getCourseById,updAllCourses,getCoursesCount}=require('./helpers/getAllCourses'),
+//{insertDegree}=require("./helpers/insertDegree")
+{ navbarSearch } = require('./helpers/navbarSearch')
 
 const { searchCourse } = require('./helpers/searchCourse');
 const {updCrsDel, updCrsBlk, updCrsRsm} = require('./helpers/updCourse');
 
 
 module.exports={
-    getCourses:getCourses,
-    insertCourses:insertCourses,
+    getCourses:getCourses,    
     getAllCourses:getAllCourses,
+    getCourseById:getCourseById,
     updAllCourses:updAllCourses,
     getCoursesCount:getCoursesCount,
+    insertCourse:insertCourse,
+    updateCourse:updateCourse,
+    insertDegree:insertDegree,
+    updateDegree:updateDegree,
     searchCourse:searchCourse,
     navbarSearch:navbarSearch,
-    insertDegree:insertDegree,
     updCrsDel:updCrsDel,
     updCrsBlk:updCrsBlk,
     updCrsRsm:updCrsRsm,

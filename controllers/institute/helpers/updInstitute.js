@@ -1,11 +1,11 @@
-const courses =require('../../../models/courses');
+const institutes =require('../../../models/institute');
 var endecode = require('../../../config/endecode');
 var utils = require('../../../config/utils');
 
-exports.updCrsDel=async(req,res)=>{
+exports.updInsDel=async(req,res)=>{
     try{
         let id= req.params.id;
-        let response = await courses.findByIdAndDelete(id, function (err){
+        let response = await institutes.findByIdAndDelete(id, function (err){
 
             if(err){
                 res.json({
@@ -18,12 +18,11 @@ exports.updCrsDel=async(req,res)=>{
                     success:true,
                     data:1
                 })
-            }
-    
+            }    
         })
 
     }catch(err){
-        utils.logException(err,req,"updCourse.updCrsDel");
+        utils.logException(err,req,"updInstitute.updInsDel");
         res.json({
             success:false,
             data:err
@@ -31,11 +30,11 @@ exports.updCrsDel=async(req,res)=>{
     }
 }
 
-exports.updCrsBlk=async(req,res)=>{
+exports.updInsBlk=async(req,res)=>{
     try{
         let id= req.params.id;
         console.log(id);
-        let response = await courses.findByIdAndUpdate(id,{"status": "1"}, function(err, result){
+        let response = await institutes.findByIdAndUpdate(id,{"status": "1"}, function(err, result){
 
             if(err){
                 res.json({
@@ -48,12 +47,11 @@ exports.updCrsBlk=async(req,res)=>{
                     success:true,
                     data:1
                 })
-            }
-    
+            }    
         })
 
     }catch(err){
-        utils.logException(err,req,"updCourse.updCrsBlk");
+        utils.logException(err,req,"updInstitute.updInsBlk");
         res.json({
             success:false,
             data:err
@@ -61,10 +59,10 @@ exports.updCrsBlk=async(req,res)=>{
     }
 }
 
-exports.updCrsRsm=async(req,res)=>{
+exports.updInsRsm=async(req,res)=>{
     try{
         let id= req.params.id;
-        let response = await courses.findByIdAndUpdate(id,{"status": "0"}, function(err, result){
+        let response = await institutes.findByIdAndUpdate(id,{"status": "0"}, function(err, result){
 
             if(err){
                 res.json({
@@ -77,12 +75,11 @@ exports.updCrsRsm=async(req,res)=>{
                     success:true,
                     data:1
                 })
-            }
-    
+            }    
         })
 
     }catch(err){
-        utils.logException(err,req,"updCourse.updCrsRsm");
+        utils.logException(err,req,"updInstitute.updInsRsm");
         res.json({
             success:false,
             data:err
