@@ -65,7 +65,7 @@
                     <td class="hidden-480"><a href="mailto:{{item.email}}">{{item.email}}</a></td>
                     <td class="hidden-480">{{item.creation_date}}</td>
                     <td>{{#ifCond item.status '==' 0}}<a href="" class="suspend" data-toggle="tooltip" title="Approved"><span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i></span></a>{{else}}<a href="" class="resume" data-toggle="tooltip" title="Suspended"><span class="label label-warning"><i class="fa fa-pause" aria-hidden="true"></i></span></a>{{/ifCond }}</td>
-                    <td><a href="webusersview?id={{item.webid}}" class="btn mini blue" title="View"><i class="icon-share"></i></a> &nbsp; <a href="courses?web={{item.webid}}" class="btn mini red-stripe"><i class="fa fa-graduation-cap" aria-hidden="true"></i></a></td>
+                    <td><a href="webusersview?id={{item.webid}}" class="btn mini blue" title="View"><i class="icon-share"></i></a> &nbsp; <a href="courses?web={{item.webid}}" class="btn mini red-stripe" title="Courses"><i class="fa fa-graduation-cap" aria-hidden="true"></i></a></td>
                   </tr>
                 {{/each}}
                 </tbody>

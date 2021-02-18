@@ -4,7 +4,7 @@ const {getLoginUsers}=require('./helpers/getLoginUsers')
 
 
 const {updAdmDel, updAdmBlk, updAdmRsm, updWebBlk, updWebRsm} = require('./helpers/updAdm'),
-{getUserRoles, getUserOnlyRole}=require('./helpers/getUserRoles'),
+{getUserRoles, getRoles, getUserOnlyRole}=require('./helpers/getUserRoles'),
 {getAdmUsers, getAdmOnlyUser, getAdmByUsername, getAdmCount, insAdmUser, updAdmUser}=require('./helpers/getAdmUsers'),
 {getWebUsers, getWebOnlyUser,getWebCount}=require('./helpers/getWebUsers')
 //{getAllUsers}=require('./helpers/getAllUsers')
@@ -15,6 +15,7 @@ module.exports={
     //getUsers:getUsers,
     getLoginUsers:getLoginUsers,
     getUserRoles:getUserRoles,
+    getRoles:getRoles,
     getUserOnlyRole:getUserOnlyRole,
     getAdmUsers:getAdmUsers,
     getAdmOnlyUser:getAdmOnlyUser,

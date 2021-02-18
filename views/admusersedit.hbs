@@ -40,7 +40,7 @@
                   <div class="controls">
                     <select id="admtype" name="admtype" class="span6 m-wrap vlditm">
                       {{#each items as |item|}}  
-                         <option value="{{item.rlid}}" {{#ifCond item.rlid '==' ../data.admtype}} selected="selected" {{/ifCond}}>{{item.name}}</option>
+                         <option value="{{item.rlid}}" {{#ifCond item.rlid '==' ../data.enctype}} selected="selected" {{/ifCond}}>{{item.name}}</option>
                       {{/each}}
                     </select>
                     <span class="help-inline"></span>

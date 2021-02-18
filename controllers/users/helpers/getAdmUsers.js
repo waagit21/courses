@@ -50,7 +50,7 @@ exports.getAdmUsers = (req,res) => users.aggregate([
 
 exports.getAdmOnlyUser = (req,res) => users.findOne({_id: endecode.decryptstr(req.usrid)}).lean().then(function(doc) {
   doc.admid = req.usrid;
-  doc.admtype = endecode.encryptstr(doc.admtype);
+  doc.enctype = endecode.encryptstr(doc.admtype);
   return doc;
 }).catch(function(err) {
   utils.logException(err,req,"getAdmUsers.getAdmOnlyUser");

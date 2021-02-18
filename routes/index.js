@@ -151,7 +151,7 @@ router.get('/admusersedit', async function(req, res, next) {
       res.redirect('/admusers');
     }
   }
-  var rldata = await users.getUserRoles; 
+  var rldata = await users.getRoles(req, res); 
   if(rldata !== undefined && rldata !== null) {  
     res.render('admusersedit', { title: 'Admin Users', admusersedit:true, prntadmusers:true, custom:"admusersedit", items: rldata, data: admdata, heading: heading});
   }
