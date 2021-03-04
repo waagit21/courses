@@ -1,14 +1,4 @@
-<style>
-  .form-horizontal .controls {
-    margin-left: 320px;
-  }
-  .form-horizontal .control-label {
-    width: 300px;
-  }
-  .form .form-actions {
-    padding-left: 330px;
-}
-</style>
+<link href="assets/css/formstyle.css" rel="stylesheet" />
 <div class="page-content"> 
     <!-- BEGIN PAGE CONTAINER-->
     <div class="container-fluid"> 
@@ -35,7 +25,7 @@
             </div>
             <div class="portlet-body form">
               <!-- BEGIN FORM-->
-              <form id="frmdegree" action="/upddegree" class="form-horizontal" method="post" onSubmit="return Validate();">
+              <form id="frmdegree" action="/upddegree" class="form-horizontal" method="post" enctype="multipart/form-data" onSubmit="return Validate();">
               <input id="dataid" name="dataid" type="hidden" value="{{data._id}}" />
               {{!-- <input id="_id" name="_id" type="hidden" value="5fcd16d03b23b53c78d4ce44" /> --}}
               {{#if error}}
@@ -54,19 +44,21 @@
                 <div id="dvcourseSpecification" class="control-group">
                   <label class="control-label">Degree Specification<span class="required">*</span></label>
                   <div class="controls">
-                    <select id="courseSpecification" name="courseSpecification" class="span6 m-wrap vlditm">  
-                         <option value="Certificate">Certificate</option>
-                         <option value="Associate">Associate</option>
+                    <select id="courseSpecification" name="courseSpecification" class="span6 m-wrap vlditm">
+                      {{#each bsdata.categories as |item|}}  
+                         <option value="{{item}}" {{#ifCond item '==' ../data.courseSpecification}} selected="selected" {{/ifCond}}>{{item}}</option>
+                      {{/each}}  
                     </select>
                     <span class="help-inline"></span>
                   </div>
                 </div>
                 <div id="dvtype" class="control-group">
-                  <label class="control-label">Select Degree Type<span class="required">*</span></label>
+                  <label class="control-label">Degree Type<span class="required">*</span></label>
                   <div class="controls">
-                    <select id="type" name="type" class="span6 m-wrap vlditm">  
-                         <option value="Disciplinary">Disciplinary Course</option>
-                         <option value="Interdisciplinary">Interdisciplinary Course</option>
+                    <select id="type" name="type" class="span6 m-wrap vlditm">
+                      {{#each bsdata.types as |item|}}  
+                         <option value="{{item}}" {{#ifCond item '==' ../data.type}} selected="selected" {{/ifCond}}>{{item}}</option>
+                      {{/each}}
                     </select>
                     <span class="help-inline"></span>
                   </div>
@@ -74,14 +66,14 @@
                 <div id="dvdegreeOverview" class="control-group">
                   <label class="control-label">Degree Importance/Overview<span class="required">*</span></label>
                   <div class="controls">
-                    <textarea id="degreeOverview" name="degreeOverview" class="span6 m-wrap vlditm" rows="5" placeholder="Degree Importance/Overview">{{data.degreeOverview}}</textarea>
+                    <textarea id="degreeOverview" name="degreeOverview" class="span6 m-wrap vlditm" rows="5" maxlength="100" placeholder="Degree Importance/Overview">{{data.degreeOverview}}</textarea> <span id="textCounter1" class="smptxt"></span>
                     <span class="help-inline"></span>
                   </div>
                 </div>
                 <div id="dvdegreeContent" class="control-group">
                   <label class="control-label">Degree Content<span class="required">*</span></label>
                   <div class="controls">
-                    <textarea id="degreeContent" name="degreeContent" class="span6 m-wrap vlditm" rows="5" placeholder="Degree Content">{{data.degreeContent}}</textarea>
+                    <textarea id="degreeContent" name="degreeContent" class="span6 m-wrap vlditm" rows="5" placeholder="Degree Content">{{data.degreeContent}}</textarea> 
                     <span class="help-inline"></span>
                   </div>
                 </div>
@@ -92,11 +84,19 @@
                     <span class="help-inline"></span>
                   </div>
                 </div>
+                {{!-- <div class="field_wrapper">
+                  <div>
+                      <input type="text" name="field_name" value=""/>
+                      <a href="javascript:void(0);" class="add_button" title="Add field">add</a>
+                  </div>
+                </div> --}}
                 <div id="dvcourse" class="control-group">
-                  <label class="control-label">Course Name<span class="required">*</span></label>
+                  <label class="control-label">Course Name<span class="required">*</span><input id="hdncourse" name="hdncourse" type="hidden" value="{{data.course}}" /></label>
                   <div class="controls">
-                    <input id="course" name="course" type="text" class="span6 m-wrap vlditm" value="{{data.course}}" placeholder="Course Name" />
-                    <span class="help-inline"></span>
+                    <div class="field_wrapper">
+                      <input id="course" name="course" type="text" class="span6 m-wrap vlditm" placeholder="Course Name" /> <a id="lnkcourse" href="javascript:void(0);" onclick="AddTextbox(this,'course','Course Name')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
+                      <span class="help-inline"></span>
+                    </div>
                   </div>
                 </div>
                 <div id="dvtotalCourses" class="control-group">
@@ -107,10 +107,12 @@
                   </div>
                 </div>
                 <div id="dvonline" class="control-group">
-                  <label class="control-label">Online Course Name<span class="required">*</span></label>
+                  <label class="control-label">Online Course Name<span class="required">*</span><input id="hdnonline" name="hdnonline" type="hidden" value="{{data.online}}" /></label>
                   <div class="controls">
-                    <input id="online" name="online" type="text" class="span6 m-wrap vlditm" value="{{data.online}}" placeholder="Online Course Name" />
-                    <span class="help-inline"></span>
+                    <div class="field_wrapper">
+                      <input id="online" name="online" type="text" class="span6 m-wrap vlditm" placeholder="Online Course Name" /> <a id="lnkonline" href="javascript:void(0);" onclick="AddTextbox(this,'online','Online Course Name')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
+                      <span class="help-inline"></span>
+                    </div>
                   </div>
                 </div>
                 <div id="dvofflinetotal" class="control-group">
@@ -121,10 +123,12 @@
                   </div>
                 </div>
                 <div id="dvoffline" class="control-group">
-                  <label class="control-label">Offline Course Name<span class="required">*</span></label>
+                  <label class="control-label">Offline Course Name<span class="required">*</span><input id="hdnoffline" name="hdnoffline" type="hidden" value="{{data.offline}}" /></label>
                   <div class="controls">
-                    <input id="offline" name="offline" type="text" class="span6 m-wrap vlditm" value="{{data.offline}}" placeholder="Offline Course Name" />
-                    <span class="help-inline"></span>
+                    <div class="field_wrapper">
+                      <input id="offline" name="offline" type="text" class="span6 m-wrap vlditm" placeholder="Offline Course Name" /> <a id="lnkoffline"  href="javascript:void(0);" onclick="AddTextbox(this,'offline','Offline Course Name')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
+                      <span class="help-inline"></span>
+                    </div>
                   </div>
                 </div>
                 <div id="dvfacultyName" class="control-group">
@@ -135,23 +139,38 @@
                   </div>
                 </div>
                 <div id="dvfacultyResume" class="control-group">
-                  <label class="control-label">Faculty Resume<span class="required">*</span></label>
+                  <label class="control-label">Faculty Resume</label>
                   <div class="controls">
-                    <input id="facultyResume" name="facultyResume" type="text" class="span6 m-wrap vlditm" value="{{data.facultyResume}}" placeholder="Faculty Resume" />
+                    <span class="span6">
+                      <input id="facultyResume" name="facultyResume" type="file" class="default" multiple />
+                      {{#each data.facultyResume as |item index|}}  
+                          <a href="uploads/{{item}}"><img src="assets/images/{{lookup ../data.fileImages @index}}" width="30" height="30" /></a>
+                      {{/each}}                    
+                    </span>
                     <span class="help-inline"></span>
+                    {{!-- <input id="facultyResume" name="facultyResume" type="text" class="span6 m-wrap vlditm" value="{{data.facultyResume}}" placeholder="Faculty Resume" />
+                    <span class="help-inline"></span> --}}
                   </div>
                 </div>
                 <div id="dvcourseLanguage" class="control-group">
                   <label class="control-label">Language<span class="required">*</span></label>
                   <div class="controls">
-                    <input id="courseLanguage" name="courseLanguage" type="text" class="span6 m-wrap vlditm" value="{{data.courseLanguage}}" placeholder="Language" />
+                    <select id="courseLanguage" name="courseLanguage" class="span6 m-wrap vlditm">
+                      {{#each bsdata.languages as |item|}}  
+                         <option value="{{item}}" {{#ifCond item '==' ../data.courseLanguage}} selected="selected" {{/ifCond}}>{{item}}</option>
+                      {{/each}}
+                    </select>
                     <span class="help-inline"></span>
                   </div>
                 </div>
                 <div id="dvcourseCountry" class="control-group">
                   <label class="control-label">Course Country<span class="required">*</span></label>
                   <div class="controls">
-                    <input id="courseCountry" name="courseCountry" type="text" class="span6 m-wrap vlditm" value="{{data.courseCountry}}" placeholder="Course Country" />
+                    <select id="courseCountry" name="courseCountry" class="span6 m-wrap vlditm">
+                      {{#each bsdata.countries as |item|}}  
+                         <option value="{{item.[0]}}" {{#ifCond item '==' ../data.type}} selected="selected" {{/ifCond}}>{{item.[0]}}</option>
+                      {{/each}}
+                    </select>
                     <span class="help-inline"></span>
                   </div>
                 </div>
@@ -163,17 +182,21 @@
                   </div>
                 </div>
                 <div id="dvcompulsory" class="control-group">
-                  <label class="control-label">List of Compulsory Subjects<span class="required">*</span></label>
+                  <label class="control-label">List of Compulsory Subjects<span class="required">*</span><input id="hdncompulsory" name="hdncompulsory" type="hidden" value="{{data.compulsory}}" /></label>
                   <div class="controls">
-                    <input id="compulsory" name="compulsory" type="text" class="span6 m-wrap vlditm" value="{{data.compulsory}}" placeholder="List of Compulsory Subjects" />
-                    <span class="help-inline"></span>
+                    <div class="field_wrapper">
+                      <input id="compulsory" name="compulsory" type="text" class="span6 m-wrap vlditm" placeholder="List of Compulsory Subjects" /> <a id="lnkcompulsory" href="javascript:void(0);" onclick="AddTextbox(this,'compulsory','List of Compulsory Subjects')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
+                      <span class="help-inline"></span>
+                    </div>
                   </div>
                 </div>
                 <div id="dvoptional" class="control-group">
-                  <label class="control-label">List of Optional Subjects<span class="required">*</span></label>
+                  <label class="control-label">List of Optional Subjects<span class="required">*</span><input id="hdnoptional" name="hdnoptional" type="hidden" value="{{data.optional}}" /></label>
                   <div class="controls">
-                    <input id="optional" name="optional" type="text" class="span6 m-wrap vlditm" value="{{data.optional}}" placeholder="List of Optional Subjects" />
-                    <span class="help-inline"></span>
+                    <div class="field_wrapper">
+                      <input id="optional" name="optional" type="text" class="span6 m-wrap vlditm" placeholder="List of Optional Subjects" /> <a id="lnkoptional" href="javascript:void(0);" onclick="AddTextbox(this,'optional','List of Optional Subjects')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
+                      <span class="help-inline"></span>
+                    </div>
                   </div>
                 </div>
                 <div id="dvcourseOfferingInstitute" class="control-group">
@@ -193,7 +216,7 @@
                 <div id="dvinstituteDetails" class="control-group">
                   <label class="control-label">Institute Details<span class="required">*</span></label>
                   <div class="controls">
-                    <textarea id="instituteDetails" name="instituteDetails" class="span6 m-wrap vlditm" rows="5" placeholder="Institute Details">{{data.instituteDetails}}</textarea>
+                    <textarea id="instituteDetails" name="instituteDetails" class="span6 m-wrap vlditm" rows="5" placeholder="Institute Details">{{data.instituteDetails}}</textarea> <span id="textCounter2" class="smptxt"></span>
                     <span class="help-inline"></span>
                   </div>
                 </div>
@@ -214,7 +237,7 @@
                 <div id="dvmediumDetails" class="control-group">
                   <label class="control-label">Teaching Institute Details<span class="required">*</span></label>
                   <div class="controls">
-                    <textarea id="mediumDetails" name="mediumDetails" class="span6 m-wrap vlditm" rows="5" placeholder="Teaching Institute Details">{{data.mediumDetails}}</textarea>
+                    <textarea id="mediumDetails" name="mediumDetails" class="span6 m-wrap vlditm" rows="5" placeholder="Teaching Institute Details">{{data.mediumDetails}}</textarea> <span id="textCounter3" class="smptxt"></span>
                     <span class="help-inline"></span>
                   </div>
                 </div>
@@ -229,9 +252,9 @@
                   <label class="control-label">Duration For<span class="required">*</span></label>
                   <div class="controls">
                     <select id="durationFor" name="durationFor" class="span6 m-wrap vlditm">  
-                         <option value="Weeks">Weeks</option>
-                         <option value="Months">Months</option>
-                         <option value="Years">Years</option>
+                         <option value="Weeks" {{#ifCond data.durationFor '==' "Weeks"}} selected="selected" {{/ifCond}}>Weeks</option>
+                         <option value="Months" {{#ifCond data.durationFor '==' "Months"}} selected="selected" {{/ifCond}}>Months</option>
+                         <option value="Years" {{#ifCond data.durationFor '==' "Years"}} selected="selected" {{/ifCond}}>Years</option>
                     </select>
                     <span class="help-inline"></span>
                   </div>
@@ -253,7 +276,9 @@
                 <div id="dvcurrency" class="control-group">
                   <label class="control-label">Currency<span class="required">*</span></label>
                   <div class="controls">
-                    <input id="currency" name="currency" type="text" class="span6 m-wrap vlditm" value="{{data.currency}}" placeholder="Currency" />
+                    <select id="currency" name="currency" class="span6 m-wrap vlditm">  
+                         <option value="$">$</option>
+                    </select>
                     <span class="help-inline"></span>
                   </div>
                 </div>
@@ -267,9 +292,19 @@
                 <div id="dvfinancialAid" class="control-group">
                   <label class="control-label">Financial Aid<span class="required">*</span></label>
                   <div class="controls">
-                    <input id="financialAid" name="financialAid" type="text" class="span6 m-wrap vlditm" value="{{data.financialAid}}" placeholder="Financial Aid" />
-                    <span class="help-inline"></span>
+                    <div class="span6">
+                      <label class="radio">
+                        <input id="financialAid" name="financialAid" type="radio" value="Yes" {{#ifCond data.financialAid '==' "Yes"}}checked{{/ifCond}} class="vlditm" /> Yes
+                      </label>
+                      <label class="radio">
+                        <input id="financialAid" name="financialAid" type="radio" value="No" {{#ifCond data.financialAid '==' "No"}}checked{{/ifCond}} class="vlditm"  /> No
+                      </label> 
+                    </div>
+                    <span class="help-inline"></span>  
                   </div>
+                  {{!-- <div class="controls">
+                    <input id="financialAid" name="financialAid" type="text" class="span6 m-wrap vlditm" value="{{data.financialAid}}" placeholder="Financial Aid" />                    
+                  </div> --}}
                 </div>
                 <div id="dvfinancialAidDetails" class="control-group">
                   <label class="control-label">Financial Aid Details<span class="required">*</span></label>

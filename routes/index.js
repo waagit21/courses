@@ -4,16 +4,29 @@ var express = require('express');
 var router = express.Router();
 //var login = require('../models/users');
 var users = require('../controllers/users/users');
-//var functions = require('../config/functions');
-//var utils = require('../config/utils');
+var functions = require('../config/functions');
+var utils = require('../config/utils');
 //var endecode = require('../config/endecode');
 const passport = require('passport');
 const { forwardAuthenticated } = require('../middleware/auth_user');
 //const eml = require('../config/email');
 //var fs = require('fs');
 
+var basedata = require('../controllers/basedata/basedata');
 var courses = require('../controllers/courses/courses');
 var institutes = require('../controllers/institute/institute');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname)
+  }
+})
+
+var upload = multer({ storage: storage })
 
 //#region Home-User
 
@@ -160,6 +173,12 @@ router.get('/admusersedit', async function(req, res, next) {
   }
 });
 
+// router.get('/admusersadd', async function(req, res, next) { 
+//   var heading = "Add";
+  
+//   res.render('admusersadd', { title: 'Admin Users', admusersadd:true, prntadmusers:true, custom:"admusersadd", heading: heading});
+// });
+
 router.post('/useradm', async function(req, res, next) {
   //req.body._id = mongoose.Types.ObjectId(req.body._id);
   //var date = functions.formatDateTime(Date.now());
@@ -186,6 +205,50 @@ router.post('/useradm', async function(req, res, next) {
       req.flash('error', msg);
       res.redirect('back');
     }
+  }
+  catch (error){
+    console.log("error");
+    console.log(error);
+  }
+  
+});
+
+router.post('/useradmadd',upload.single('blogimage'), async function(req, res, next) {
+
+  try {
+    var fileinfo = req.file;
+    console.log(fileinfo);
+    console.log(req.file.filename);
+
+    var msg = "User added successfull";
+    req.flash('success', msg);
+  }
+  catch (error){
+    console.log("error");
+    console.log(error);
+  }
+  
+});
+
+router.post('/useradmaddml',upload.array('blogimage', 5), async function(req, res, next) {
+
+  try {
+    // var fileinfo = req.files;
+    // console.log(fileinfo);
+
+    var arrfiles = [];
+    var files = [];
+    var fileKeys = Object.keys(req.files);
+    fileKeys.forEach(function(key) {
+        arrfiles.push(req.files[key].filename)
+        files.push(req.files[key]);
+    });
+    console.log(fileKeys);
+    console.log("arrfiles");
+    console.log(arrfiles);
+
+    var msg = "User added successfull";
+    req.flash('success', msg);
   }
   catch (error){
     console.log("error");
@@ -264,11 +327,14 @@ router.get('/coursesview', async function(req, res, next) {
 router.get('/coursesedit', async function(req, res, next) { 
   var heading = "Add";
   var crsdata = {};
+  var bsdata = await basedata.getAllBaseData(req); 
   if (req.query.id !== undefined && req.query.id !== "") {
     heading = "Update";
-    crsdata = await courses.getCourseById(req);    
+    crsdata = await courses.getCourseById(req);
+    crsdata.startingDate = functions.formatNumDate(crsdata.startingDate);
+    crsdata.endingDate = functions.formatNumDate(crsdata.endingDate);
   }
-  res.render('courses/coursesedit', { title: 'Course Add/Update', coursesedit:true, prntcourses:true, custom:"courses/coursesedit", data: crsdata, heading: heading});
+  res.render('courses/coursesedit', { title: 'Course Add/Update', coursesedit:true, prntcourses:true, custom:"courses/coursesedit", data: crsdata, bsdata: bsdata[0], heading: heading});
 });
 router.get('/degreesview', async function(req, res, next) { 
   if (req.query.id !== undefined && req.query.id !== "") {
@@ -286,20 +352,37 @@ router.get('/degreesview', async function(req, res, next) {
 router.get('/degreesedit', async function(req, res, next) { 
   var heading = "Add";
   var crsdata = {};
+  //req.clmnam = "categories";
+  //var ctgdata = await basedata.getBaseDataByName(req); 
+  var bsdata = await basedata.getAllBaseData(req); 
   if (req.query.id !== undefined && req.query.id !== "") {
     heading = "Update";
-    crsdata = await courses.getCourseById(req);    
+    crsdata = await courses.getCourseById(req); 
+    crsdata.startingDate = functions.formatNumDate(crsdata.startingDate);
+    crsdata.endingDate = functions.formatNumDate(crsdata.endingDate);
   }
-  res.render('courses/degreesedit', { title: 'Degree Add/Update', degreesedit:true, prntcourses:true, custom:"courses/degreesedit", data: crsdata, heading: heading});
+  res.render('courses/degreesedit', { title: 'Degree Add/Update', degreesedit:true, prntcourses:true, custom:"courses/degreesedit", data: crsdata, bsdata: bsdata[0], heading: heading});
 });
-router.post('/updcourse', async function(req, res, next) {
+router.post('/updcourse', upload.array('facultyResume', 5), async function(req, res, next) {
   //req.body._id = mongoose.Types.ObjectId(req.body._id);
   //var date = functions.formatDateTime(Date.now());
   //date = date.toDateString();
   var val =0;
   var data = {}; 
+  var arrfiles = [];
   try {
+    if (req.files && req.files.length>0) {
+      var fileKeys = Object.keys(req.files);
+      fileKeys.forEach(function(key) {
+          arrfiles.push(req.files[key].filename)
+          //files.push(req.files[key]);
+      });
+      req.body.facultyResume = arrfiles;
+    }
     if(req.body.dataid!="" && req.body.dataid!=null){
+      if (!req.files || req.files.length==0) {
+        delete req.body.facultyResume;
+      }
       val=1;
       data = await courses.updateCourse(req);
     }
@@ -323,14 +406,27 @@ router.post('/updcourse', async function(req, res, next) {
   }
   
 });
-router.post('/upddegree', async function(req, res, next) {
+router.post('/upddegree', upload.array('facultyResume', 5), async function(req, res, next) {
   //req.body._id = mongoose.Types.ObjectId(req.body._id);
   //var date = functions.formatDateTime(Date.now());
   //date = date.toDateString();
   var val =0;
   var data = {}; 
+  var arrfiles = [];
+  //var files = [];   
   try {
+    if (req.files && req.files.length>0) {
+      var fileKeys = Object.keys(req.files);
+      fileKeys.forEach(function(key) {
+          arrfiles.push(req.files[key].filename)
+          //files.push(req.files[key]);
+      });
+      req.body.facultyResume = arrfiles;
+    } 
     if(req.body.dataid!="" && req.body.dataid!=null){
+      if (!req.files || req.files.length==0) {
+        delete req.body.facultyResume;
+      }
       val=1;
       data = await courses.updateDegree(req);
     }

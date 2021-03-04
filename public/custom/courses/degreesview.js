@@ -19,18 +19,18 @@ function ChangeStatus(uid, st) {
 			else {
 				if(st==0) {
 					$('#err_msg').parents().removeClass('hide');
-					$('#err_msg').text("User Not Blocked");
+					$('#err_msg').text("Degree Not Blocked");
 				}
 				else if(st==1) {
 					$('#err_msg').parents().removeClass('hide');
-					$('#err_msg').text("User Not Resumed");
+					$('#err_msg').text("Degree Not Resumed");
 				}
 			}
 			return false;
 		},
 		error: function (request, status, error) {
 			$('#err_msg').parents().removeClass('hide');
-			$('#err_msg').text("Error, User Status Not Changed");
+			$('#err_msg').text("Error, Degree Status Not Changed");
 			console.log("error");
 			console.log(request);
 			console.log(status);

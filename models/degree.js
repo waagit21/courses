@@ -44,8 +44,11 @@ var degree = new Schema({
     isDegree: Boolean,
     status: Number,//New added for admin, in insertion please send value 1.
     owner_type: Number,//New added for admin, in insertion please send value 0.
-    owner_id:String//Changed to ObjectId in database.
-    
+    owner_id: String,//Changed to ObjectId in database.
+    createdby: String,
+    updation_date: String,
+    updatedby: String
+
 }, {collection: 'courses'});
 
 module.exports = mongoose.model('degree', degree);

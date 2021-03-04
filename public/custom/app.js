@@ -88,3 +88,11 @@ function formatDateTime(date) {
     return day + " " + month + ", " + year + " " + hourFormatted + ":" + minuteFormatted + " " + morning;
     //return month + "/" + day + "/" + year + " " + hourFormatted + ":" + minuteFormatted + morning;
 }
+
+function formatDate(strdate) {
+	var date = new Date(strdate);
+    var year = date.getFullYear(),
+    month = "0"+date.getMonth();
+    day = "0"+date.getDate();    
+    return year + "/" + month + "/" + day;
+}

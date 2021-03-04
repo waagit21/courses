@@ -72,6 +72,16 @@ body {
   
 }
 
+.field_wrapper {
+	margin-top:5px;
+}
+.smptxt {
+	color: #0D638F !important;
+	font-weight:bold;
+}
+.smpbrd {
+	border-color: #0D638F !important;
+}
 .mr45 { margin-right: 45px !important; }
 .clrred{
 	color: red;

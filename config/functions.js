@@ -28,9 +28,11 @@ function formatDate(date) {
 function formatNumDate(dt) {
     var date = new Date(dt);
     var year = date.getFullYear(),
-        month = date.getMonth(),
+        month = date.getMonth()+1,
         day = date.getDate();
-    return year + "_" + month + "_ " + day;
+    var setmonth = month < 10 ? "0" + month : month;
+    var setday = day < 10 ? "0" + day : day;    
+    return year + "/" + setmonth + "/" + setday;
 }
 
 module.exports={

@@ -3,7 +3,8 @@ $(document).ready(function() {
 	if (url_id== null || url_id==""){
 		$("#courseSpecification").prepend("<option value='' selected='selected'>Please Select</option>");
 		$("#type").prepend("<option value='' selected='selected'>Please Select</option>");
-		$("#mode").prepend("<option value='' selected='selected'>Please Select</option>");
+		$("#courseLanguage").prepend("<option value='' selected='selected'>Please Select</option>");	
+		$("#courseCountry").prepend("<option value='' selected='selected'>Please Select</option>");		
 		$("#durationFor").prepend("<option value='' selected='selected'>Please Select</option>");
 		$("#status").prepend("<option value='' selected='selected'>Please Select</option>");
 	}
@@ -23,6 +24,21 @@ $(document).ready(function() {
 		dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 	});
 
+	$('#courseBreakDown').bind('input propertychange', function() { CharLimit(this, 100, 1); }).trigger('propertychange');
+	$('#instituteDetails').bind('input propertychange', function() { CharLimit(this, 100, 2); }).trigger('propertychange');
+	$('#mediumDetails').bind('input propertychange', function() { CharLimit(this, 100, 3); }).trigger('propertychange');
+
+	$("#partinfo").hide();
+
+	$("#part").change(function(){
+		if(this.value=="Yes"){
+			$("#partinfo").show();
+		}
+		else{
+			$("#partinfo").hide();
+		}
+	}).change();
+
 	// $("#type").change(function () {	
 	// 	RemoveSelect("type", this.value) 	      
 	// });
@@ -30,7 +46,6 @@ $(document).ready(function() {
 	// 	RemoveSelect("status", this.value) 	      
     // });
 });
-
 
 $(document).on('blur','.vlditm', function(){
 	//$(this).parent().closest('[id]').attr('id')
@@ -50,8 +65,14 @@ $(document).on('blur','.vlditm', function(){
 	}
 });
 
-
-
+function CharLimit(input, maxChar, val) {
+    var len = $(input).val().length;	
+	$('#textCounter' + val).text(len + '/' + maxChar);
+	if (len > maxChar-1) {
+        $(input).val($(input).val().substring(0, maxChar));
+		$('#textCounter' + val).text(maxChar + '/' + maxChar);
+    }
+}
 function RemoveSelect(id, val) {
 	var first = $("#"+ id +" option:first").val();
 	if(first==""){
@@ -60,7 +81,64 @@ function RemoveSelect(id, val) {
 		} 
 	}
 }
-
+function CheckImages() {
+    //var x = document.getElementById("facultyResume");
+	var x = $('#facultyResume')[0];;
+    var msg = "";    
+    if ('files' in x) {
+        if (x.files.length == 0) {
+            //msg = "Select one or more images.";
+        }
+		else if (x.files.length > 3) {
+            msg = "Only 3 files allowed";
+        }
+        else {
+            for (var i = 0; i < x.files.length; i++) {
+                var err = 0;
+                var txt = "";
+                var file = x.files[i];
+                if ('name' in file) {
+                    txt = "<strong>" + file.name + ":</strong>";
+                    if (CheckExtension(file.name) == 1) {
+                        err = 1;
+                        txt += " Invalid file extension,Only pdf and doc/docx files allowed.";
+                    }
+                }                
+                if ('size' in file) {
+                    // if (file.size < 50) {
+                    //     err = 1;
+                    //     txt += "invalid file";
+                    // }
+                    if (file.size > 4194304) {
+                        err = 1;
+                        txt += " File size must be less then 4MB";
+                    }
+                }
+                if (err == 1) {
+                    msg += txt + "<br />";
+                }
+            }
+        }      
+    }
+	return msg;
+    // if (msg != null && msg != "") {
+    //     $("#errMsg").html(msg);
+    //     return false;
+    // }
+    // else {
+    //     return true;
+    // }    
+}
+function CheckExtension(pic) {
+    var allowedFiles = [".doc", ".docx", ".pdf"];
+    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + allowedFiles.join('|') + ")$");
+    if (!regex.test(pic.toLowerCase())) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
 function Validate() {
 	var url_id= getParameterByName('id');
 	var chk=0;
@@ -70,9 +148,9 @@ function Validate() {
 	var courseName = $("#courseName").val();
 	var courseSpecification = $("#courseSpecification").val();
 	var type = $("#type").val();
-	var mode = $("#mode").val();
+	//var mode = $("#mode").val();
 	var facultyName = $("#facultyName").val();
-	var facultyResume = $("#facultyResume").val();
+	//var facultyResume = $("#facultyResume").val();
 	var courseLanguage = $("#courseLanguage").val();
 	var courseBreakDown = $("#courseBreakDown").val();
 	var courseCountry = $("#courseCountry").val();
@@ -89,7 +167,7 @@ function Validate() {
 	var totalCost = $("#totalCost").val();
 	var currency = $("#currency").val();
 	var breakDown = $("#breakDown").val();
-	var financialAid = $("#financialAid").val();
+	//var financialAid = $("#financialAid").val();
 	var financialAidDetails = $("#financialAidDetails").val();
 	var startingDate = $("#startingDate").val();
 	var endingDate = $("#endingDate").val();
@@ -114,7 +192,8 @@ function Validate() {
 		$("#dvtype .help-inline").show().text("Please select degree type");
 		chk = 1;
 	}
-	if (mode == "") {
+	if ($('input[name="financialAid"]:checked').length == 0) {
+	//if (mode == "") {
 		$("#dvmode").addClass("error");
 		$("#dvmode .help-inline").show().text("Please select mode");
 		chk = 1;
@@ -124,14 +203,20 @@ function Validate() {
 		$("#dvfacultyName .help-inline").show().text("Please enter faculty name");
 		chk = 1;
 	}
-	if (facultyResume == "") {
+	var imgmsg = CheckImages();
+	if (imgmsg!="" && imgmsg!=null) {
 		$("#dvfacultyResume").addClass("error");
-		$("#dvfacultyResume .help-inline").show().text("Please enter faculty resume");
+		$("#dvfacultyResume .help-inline").show().html(imgmsg);
 		chk = 1;
 	}
+	// if (facultyResume == "") {
+	// 	$("#dvfacultyResume").addClass("error");
+	// 	$("#dvfacultyResume .help-inline").show().text("Please enter faculty resume");
+	// 	chk = 1;
+	// }
 	if (courseLanguage == "") {
 		$("#dvcourseLanguage").addClass("error");
-		$("#dvcourseLanguage .help-inline").show().text("Please enter language");
+		$("#dvcourseLanguage .help-inline").show().text("Please select language");
 		chk = 1;
 	}
 	if (courseBreakDown == "") {
@@ -142,7 +227,7 @@ function Validate() {
 	
 	if (courseCountry == "") {
 		$("#dvcourseCountry").addClass("error");
-		$("#dvcourseCountry .help-inline").show().text("Please enter course country");
+		$("#dvcourseCountry .help-inline").show().text("Please select course country");
 		chk = 1;
 	}
 	if (courseCity == "") {
@@ -152,7 +237,7 @@ function Validate() {
 	}
 	if (courseOfferingInstitute == "") {
 		$("#dvcourseOfferingInstitute").addClass("error");
-		$("#dvcourseOfferingInstitute .help-inline").show().text("Please enter degree offering institute");
+		$("#dvcourseOfferingInstitute .help-inline").show().text("Please enter course offering institute");
 		chk = 1;
 	}
 	if (instituteWebAddress == "") {
@@ -202,7 +287,7 @@ function Validate() {
 	}
 	if (currency == "") {
 		$("#dvcurrency").addClass("error");
-		$("#dvcurrency .help-inline").show().text("Please enter currency");
+		$("#dvcurrency .help-inline").show().text("Please select currency");
 		chk = 1;
 	}
 	if (breakDown == "") {
@@ -210,9 +295,10 @@ function Validate() {
 		$("#dvbreakDown .help-inline").show().text("Please enter cost breakdown");
 		chk = 1;
 	}
-	if (financialAid == "") {
+	if ($('input[name="financialAid"]:checked').length == 0) {
+	//if (financialAid == "") {
 		$("#dvfinancialAid").addClass("error");
-		$("#dvfinancialAid .help-inline").show().text("Please enter financial aid");
+		$("#dvfinancialAid .help-inline").show().text("Please select financial aid");
 		chk = 1;
 	}
 	if (financialAidDetails == "") {
@@ -235,21 +321,23 @@ function Validate() {
 		$("#dvpart .help-inline").show().text("Please select part");
 		chk = 1;
 	}
-	if (programSpecs == "") {
-		$("#dvprogramSpecs").addClass("error");
-		$("#dvprogramSpecs .help-inline").show().text("Please enter program specification");
-		chk = 1;
-	}
-	if (programName == "") {
-		$("#dvprogramName").addClass("error");
-		$("#dvprogramName .help-inline").show().text("Please enter program name");
-		chk = 1;
-	}
-	if (programType == "") {
-		$("#dvprogramType").addClass("error");
-		$("#dvprogramType .help-inline").show().text("Please enter program type");
-		chk = 1;
-	}
+	if(part=="Yes"){
+		if (programSpecs == "") {
+			$("#dvprogramSpecs").addClass("error");
+			$("#dvprogramSpecs .help-inline").show().text("Please enter program specification");
+			chk = 1;
+		}
+		if (programName == "") {
+			$("#dvprogramName").addClass("error");
+			$("#dvprogramName .help-inline").show().text("Please enter program name");
+			chk = 1;
+		}
+		if (programType == "") {
+			$("#dvprogramType").addClass("error");
+			$("#dvprogramType .help-inline").show().text("Please enter program type");
+			chk = 1;
+		}
+	}	
 	if (status == "") {
 		$("#dvstatus").addClass("error");
 		$("#dvstatus .help-inline").show().text("Please select status");
