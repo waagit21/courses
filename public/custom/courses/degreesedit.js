@@ -413,14 +413,14 @@ function Validate() {
 		chk = 1;
 	}
 	
-	console.log(chk);
+	return false;
 
-	if (chk==1) {
-             return false;
-	}
-	else {
-	    return true;
-	}
+	// if (chk==1) {
+	// 	return false;
+	// }
+	// else {
+	// 	return true;
+	// }
 }
 
 // $(document).ready(function(){
