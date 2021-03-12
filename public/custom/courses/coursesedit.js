@@ -345,7 +345,7 @@ function Validate() {
 	}
 
 	console.log(chk);
-
+	
 	if (chk==1) {
 		return false;
 	}
