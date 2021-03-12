@@ -412,6 +412,8 @@ function Validate() {
 		$("#dvstatus .help-inline").show().text("Please select status");
 		chk = 1;
 	}
+	
+	console.log(chk);
 
 	if (chk==1) {
              return false;
