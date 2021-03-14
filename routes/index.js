@@ -124,7 +124,7 @@ router.get('/admusersview', async function(req, res, next) {
     var error = "";
     if(admdata._id==req.user.id || admdata.type > req.user.type || req.user.type == 1){
       if(admdata !== undefined && admdata !== null) {
-        rldata = await users.getUserOnlyRole(admdata.admtype); 
+        rldata = await users.getUserOnlyRole(req.query.id); 
         if(admdata.createdby != "") {
           admcrt = await users.getAdmByUsername(admdata.createdby);
         }
