@@ -89,7 +89,7 @@ $(document).on('blur','.vlditm', function(){
 	}
 });
 
-function AddTextbox (elm,name,place,val) {
+function AddTextbox(elm,name,place,val) {
 	var value="";
 	if(val!="" && val!=null && val!=undefined){
 		value = 'value="'+val+'"';
@@ -97,10 +97,10 @@ function AddTextbox (elm,name,place,val) {
     var fieldHTML = '<div class="field_wrapper"> <input name="'+name+'" type="text" class="span6 m-wrap smpbrd" placeholder="'+place+'" '+value+' /> <a href="javascript:void(0);" onclick="RemoveTextbox(this)" class="remove_button" title="Remove field"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></a> </div>';
 	$(elm).parent('div').append(fieldHTML); //Add field html
 }
-function RemoveTextbox (elm) {
+function RemoveTextbox(elm) {
 	$(elm).parent('div').remove(); //Remove field html
 }
-function SetTextbox (data,name,place) {
+function SetTextbox(data,name,place) {
 	if(data!="" && data!=null){
 		var arr = data.split(",");
 		$('#'+name).val(arr[0]);		
@@ -109,6 +109,19 @@ function SetTextbox (data,name,place) {
 		}
 	}	
 }
+
+// function AddUpload(elm,name,place,val) {
+// 	var value="";
+// 	if(val!="" && val!=null && val!=undefined){
+// 		value = 'value="'+val+'"';
+// 	}
+//     //var fieldHTML = '<div class="field_wrapper"> <input name="'+name+'" type="text" class="span6 m-wrap smpbrd" placeholder="'+place+'" '+value+' /> <a href="javascript:void(0);" onclick="RemoveTextbox(this)" class="remove_button" title="Remove field"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></a> </div>';
+// 	var fieldHTML = '<div class="field_wrapper control-group"><div class="control-group">  <div class="controls"> <input id="facultyName" name="facultyName" type="text" class="span6 m-wrap smpbrd" placeholder="'+place+'" '+value+' /> <a href="javascript:void(0);" onclick="RemoveUpload(this)" class="remove_button" title="Remove field"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></a> <span class="help-inline"></span> </div> </div> <div class="control-group"> <div class="controls"> <span class="span6"> <input id="facultyResume" name="facultyResume" type="file" class="default smpbrd" multiple /> </span> <span class="help-inline"></span>  </div> </div> </div>';
+// 	$('#addFaculty').append(fieldHTML); //Add field html
+// }
+// function RemoveUpload(elm) {
+// 	$(elm).parent('div').parent('div').parent('div').remove(); //Remove field html
+// }
 function CharLimit(input, maxChar, val) {
     var len = $(input).val().length;	
 	$('#textCounter' + val).text(len + '/' + maxChar);

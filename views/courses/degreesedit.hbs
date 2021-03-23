@@ -134,7 +134,7 @@
                 <div id="dvfacultyName" class="control-group">
                   <label class="control-label">Faculty Name<span class="required">*</span></label>
                   <div class="controls">
-                    <input id="facultyName" name="facultyName" type="text" class="span6 m-wrap vlditm" value="{{data.facultyName}}" placeholder="Faculty Name" />
+                    <input id="facultyName" name="facultyName" type="text" class="span6 m-wrap vlditm" value="{{data.facultyName}}" placeholder="Faculty Name" /> <a id="lnkfaculty" href="javascript:void(0);" onclick="AddUpload(this,'faculty','Faculty Name')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
                     <span class="help-inline"></span>
                   </div>
                 </div>
@@ -152,6 +152,9 @@
                     <span class="help-inline"></span> --}}
                   </div>
                 </div>
+                {{!-- <div id="addFaculty" class="control-group">
+
+                </div> --}}
                 <div id="dvcourseLanguage" class="control-group">
                   <label class="control-label">Language<span class="required">*</span></label>
                   <div class="controls">
