@@ -5,10 +5,10 @@
       <!-- BEGIN PAGE HEADER-->
       <div class="row-fluid">
         <div class="span12">
-          <h3 class="page-title"> Courses <small>View/Add/Edit/Delete</small> </h3>
+          <h3 class="page-title"> Degrees <small>View/Add/Edit/Delete</small> </h3>
           <ul class="breadcrumb">
-            <li> <i class="icon-user"></i> <a href="coursesview">View Courses</a> <span class="icon-angle-right"></span> </li>
-            <li> <a href="">{{heading}} Course
+            <li> <i class="icon-user"></i> <a href="coursesview">View Degrees</a> <span class="icon-angle-right"></span> </li>
+            <li> <a href="">{{heading}} Degree
               </a> </li>
           </ul>
         </div>
@@ -20,7 +20,7 @@
           <!-- BEGIN VALIDATION STATES-->
           <div class="portlet box purple">
             <div class="portlet-title">
-              <h4><i class="icon-reorder"></i>Courses</h4>
+              <h4><i class="icon-reorder"></i>Degrees</h4>
               <div class="tools"> <a href="javascript:;" class="collapse"></a> </div>
             </div>
             <div class="portlet-body form">
@@ -131,30 +131,45 @@
                     </div>
                   </div>
                 </div>
-                <div id="dvfacultyName" class="control-group">
+                {{#ifCond heading '==' "Add"}}
+                <div id="dvfacultyName0" class="control-group">
                   <label class="control-label">Faculty Name<span class="required">*</span></label>
                   <div class="controls">
-                    <input id="facultyName" name="facultyName" type="text" class="span6 m-wrap vlditm" value="{{data.facultyName}}" placeholder="Faculty Name" /> <a id="lnkfaculty" href="javascript:void(0);" onclick="AddUpload(this,'faculty','Faculty Name')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
-                    <span class="help-inline"></span>
+                    <input id="facultyName0" name="facultyName" type="text" class="span6 m-wrap vlditm" value="{{data.facultyName}}" placeholder="Faculty Name" /> <a id="lnkfaculty" href="javascript:void(0);" onclick="AddUpload(this,'faculty','Faculty Name')" class="add_button" title="Add field"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></a>
+                    <span class="help-inline fnm0"></span>
                   </div>
                 </div>
-                <div id="dvfacultyResume" class="control-group">
+                <div id="dvfacultyResume0" class="control-group">
                   <label class="control-label">Faculty Resume</label>
                   <div class="controls">
                     <span class="span6">
-                      <input id="facultyResume" name="facultyResume" type="file" class="default" multiple />
-                      {{#each data.facultyResume as |item index|}}  
-                          <a href="uploads/{{item}}"><img src="assets/images/{{lookup ../data.fileImages @index}}" width="30" height="30" /></a>
-                      {{/each}}                    
+                       <input id="facultyResume0" name="facultyResume" type="file" class="default"  /> {{!--multiple--}}              
                     </span>
-                    <span class="help-inline"></span>
+                    <span class="help-inline frs0"></span>
                     {{!-- <input id="facultyResume" name="facultyResume" type="text" class="span6 m-wrap vlditm" value="{{data.facultyResume}}" placeholder="Faculty Resume" />
                     <span class="help-inline"></span> --}}
                   </div>
                 </div>
-                {{!-- <div id="addFaculty" class="control-group">
-
-                </div> --}}
+                <div id="addFaculty" class="control-group">
+                </div>
+                {{else}}
+                  {{#each data.facultyInformation as |item index|}}
+                      <div class="row-fluid">
+                        <div class="span6 ">
+                          <div class="control-group">
+                            <label class="control-label">Faculty Name:</label>
+                            <div class="controls"> <span class="text bold">{{item.facultyName}}</span> </div>
+                          </div>
+                        </div>
+                        <div class="span6 ">
+                          <div class="control-group">
+                            <label class="control-label">Faculty Resume:</label>
+                            <div class="controls"> <a href="uploads/{{item.facultyResume}}"><img src="assets/images/{{lookup ../data.fileImages @index}}" /></a> </div>
+                          </div>
+                        </div>
+                      </div>
+                    {{/each}}
+                {{/ifCond}}
                 <div id="dvcourseLanguage" class="control-group">
                   <label class="control-label">Language<span class="required">*</span></label>
                   <div class="controls">

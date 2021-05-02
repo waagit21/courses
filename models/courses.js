@@ -17,9 +17,10 @@ var courses=new Schema({
     //online: Array,
     //offlinetotal: Number,
     //offline: Array,    
-    facultyName: String,
-    //facultyInfo: Array,
-    facultyResume: Array,
+        //facultyName: String,
+        //facultyInfo: Array,
+        //facultyResume: Array,
+    facultyInformation: Array, //new
     courseLanguage: String,
     courseCountry: String,
     courseCity: String,

@@ -94,8 +94,45 @@
                     <textarea id="courseBreakDown" name="courseBreakDown" class="span6 m-wrap vlditm" rows="5" placeholder="Course Importance & Breakdown">{{data.courseBreakDown}}</textarea> <span id="textCounter1" class="smptxt"></span>
                     <span class="help-inline"></span>
                   </div>
-                </div>                
+                </div>  
+                {{#ifCond heading '==' "Add"}}
                 <div id="dvfacultyName" class="control-group">
+                  <label class="control-label">Faculty Name<span class="required">*</span></label>
+                  <div class="controls">
+                    <input id="facultyName" name="facultyName" type="text" class="span6 m-wrap vlditm" value="{{data.facultyName}}" placeholder="Faculty Name" />
+                    <span class="help-inline fnm0"></span>
+                  </div>
+                </div>
+                <div id="dvfacultyResume" class="control-group">
+                  <label class="control-label">Faculty Resume</label>
+                  <div class="controls">
+                    <span class="span6">
+                       <input id="facultyResume" name="facultyResume" type="file" class="default"  /> {{!--multiple--}}              
+                    </span>
+                    <span class="help-inline frs0"></span>
+                  </div>
+                </div>
+                <div id="addFaculty" class="control-group">
+                </div>
+                {{else}}
+                  {{#each data.facultyInformation as |item index|}}
+                    <div class="row-fluid">
+                      <div class="span6 ">
+                        <div class="control-group">
+                          <label class="control-label">Faculty Name:</label>
+                          <div class="controls"> <span class="text bold">{{item.facultyName}}</span> </div>
+                        </div>
+                      </div>
+                      <div class="span6 ">
+                        <div class="control-group">
+                          <label class="control-label">Faculty Resume:</label>
+                          <div class="controls"> <a href="uploads/{{item.facultyResume}}"><img src="assets/images/{{lookup ../data.fileImages @index}}" /></a> </div>
+                        </div>
+                      </div>
+                    </div>
+                  {{/each}}
+                {{/ifCond}}              
+                {{!-- <div id="dvfacultyName" class="control-group">
                   <label class="control-label">Faculty Name<span class="required">*</span></label>
                   <div class="controls">
                     <input id="facultyName" name="facultyName" type="text" class="span6 m-wrap vlditm" value="{{data.facultyName}}" placeholder="Faculty Name" />
@@ -112,10 +149,8 @@
                       {{/each}} 
                     </span>    
                     <span class="help-inline"></span>
-                    {{!-- <input id="facultyResume" name="facultyResume" type="text" class="span6 m-wrap vlditm" value="{{data.facultyResume}}" placeholder="Faculty Resume" />
-                    <span class="help-inline"></span> --}}
                   </div>
-                </div>
+                </div> --}}
                 <div id="dvcourseOfferingInstitute" class="control-group">
                   <label class="control-label">Course Offering Institute<span class="required">*</span></label>
                   <div class="controls">

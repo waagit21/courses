@@ -363,7 +363,7 @@ router.get('/degreesedit', async function(req, res, next) {
   }
   res.render('courses/degreesedit', { title: 'Degree Add/Update', degreesedit:true, prntcourses:true, custom:"courses/degreesedit", data: crsdata, bsdata: bsdata[0], heading: heading});
 });
-router.post('/updcourse', upload.array('facultyResume', 5), async function(req, res, next) {
+router.post('/updcourse', upload.array('facultyResume', 1), async function(req, res, next) {
   //req.body._id = mongoose.Types.ObjectId(req.body._id);
   //var date = functions.formatDateTime(Date.now());
   //date = date.toDateString();
@@ -380,9 +380,9 @@ router.post('/updcourse', upload.array('facultyResume', 5), async function(req, 
       req.body.facultyResume = arrfiles;
     }
     if(req.body.dataid!="" && req.body.dataid!=null){
-      if (!req.files || req.files.length==0) {
-        delete req.body.facultyResume;
-      }
+      // if (!req.files || req.files.length==0) {
+      //   delete req.body.facultyResume;
+      // }
       val=1;
       data = await courses.updateCourse(req);
     }
@@ -406,7 +406,7 @@ router.post('/updcourse', upload.array('facultyResume', 5), async function(req, 
   }
   
 });
-router.post('/upddegree', upload.array('facultyResume', 5), async function(req, res, next) {
+router.post('/upddegree', upload.array('facultyResume', 10), async function(req, res, next) {
   //req.body._id = mongoose.Types.ObjectId(req.body._id);
   //var date = functions.formatDateTime(Date.now());
   //date = date.toDateString();

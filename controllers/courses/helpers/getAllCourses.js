@@ -53,12 +53,12 @@ exports.getCourseById = (req,res) => courses.findOne({_id: req.query.id}).lean()
     doc.updation_date = dateFormat(new Date(doc.updation_date * 1000), "dd mmm, yyyy hh:MM:ss TT");
   }
   var arrfiles = [];
-  if(doc.facultyResume!=undefined && doc.facultyResume.length>0) {   
-    doc.facultyResume.forEach(item => { 
-      if (item.split('.')[1].toLowerCase() == 'pdf') {
+  if(doc.facultyInformation!=undefined && doc.facultyInformation.length>0) {   
+    doc.facultyInformation.forEach(item => { 
+      if (item.facultyResume.split('.')[1].toLowerCase() == 'pdf') {
         arrfiles.push("pdf.jpg")
       } 
-      else if (item.split('.')[1].toLowerCase() == 'doc' || item.split('.')[1].toLowerCase() == 'docx' ) {
+      else if (item.facultyResume.split('.')[1].toLowerCase() == 'doc' || item.facultyResume.split('.')[1].toLowerCase() == 'docx' ) {
         arrfiles.push("docx.jpg")
       } 
       else {
@@ -67,6 +67,21 @@ exports.getCourseById = (req,res) => courses.findOne({_id: req.query.id}).lean()
     }); 
   }  
   doc.fileImages = arrfiles;
+  // var arrfiles = [];
+  // if(doc.facultyResume!=undefined && doc.facultyResume.length>0) {   
+  //   doc.facultyResume.forEach(item => { 
+  //     if (item.split('.')[1].toLowerCase() == 'pdf') {
+  //       arrfiles.push("pdf.jpg")
+  //     } 
+  //     else if (item.split('.')[1].toLowerCase() == 'doc' || item.split('.')[1].toLowerCase() == 'docx' ) {
+  //       arrfiles.push("docx.jpg")
+  //     } 
+  //     else {
+  //       arrfiles.push("file.jpg")
+  //     } 
+  //   }); 
+  // }  
+  // doc.fileImages = arrfiles;
   return doc;
 }).catch(function(err) {
   utils.logException(err,req,"getAdmUsers.getAdmOnlyUser");

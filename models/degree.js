@@ -15,9 +15,10 @@ var degree = new Schema({
     online: Array,
     offlinetotal: String,
     offline: Array,    
-    facultyName: String,//facName. Made common in both
-    //facultyInfo: Array,
-    facultyResume: Array,
+        //facultyName: String,//facName. Made common in both
+        //facultyInfo: Array,    
+        //facultyResume: Array,
+    facultyInformation: Array, //new
     courseLanguage: String,
     courseCountry: String,
     courseCity: String,

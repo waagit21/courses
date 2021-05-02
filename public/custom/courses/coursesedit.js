@@ -198,16 +198,18 @@ function Validate() {
 		$("#dvmode .help-inline").show().text("Please select mode");
 		chk = 1;
 	}
-	if (facultyName == "") {
-		$("#dvfacultyName").addClass("error");
-		$("#dvfacultyName .help-inline").show().text("Please enter faculty name");
-		chk = 1;
-	}
-	var imgmsg = CheckImages();
-	if (imgmsg!="" && imgmsg!=null) {
-		$("#dvfacultyResume").addClass("error");
-		$("#dvfacultyResume .help-inline").show().html(imgmsg);
-		chk = 1;
+	if(dataid!=null && dataid!=""){
+		if (facultyName == "") {
+			$("#dvfacultyName").addClass("error");
+			$("#dvfacultyName .help-inline").show().text("Please enter faculty name");
+			chk = 1;
+		}
+		var imgmsg = CheckImages();
+		if (imgmsg!="" && imgmsg!=null) {
+			$("#dvfacultyResume").addClass("error");
+			$("#dvfacultyResume .help-inline").show().html(imgmsg);
+			chk = 1;
+		}
 	}
 	// if (facultyResume == "") {
 	// 	$("#dvfacultyResume").addClass("error");

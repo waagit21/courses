@@ -109,19 +109,21 @@ function SetTextbox(data,name,place) {
 		}
 	}	
 }
-
-// function AddUpload(elm,name,place,val) {
-// 	var value="";
-// 	if(val!="" && val!=null && val!=undefined){
-// 		value = 'value="'+val+'"';
-// 	}
-//     //var fieldHTML = '<div class="field_wrapper"> <input name="'+name+'" type="text" class="span6 m-wrap smpbrd" placeholder="'+place+'" '+value+' /> <a href="javascript:void(0);" onclick="RemoveTextbox(this)" class="remove_button" title="Remove field"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></a> </div>';
-// 	var fieldHTML = '<div class="field_wrapper control-group"><div class="control-group">  <div class="controls"> <input id="facultyName" name="facultyName" type="text" class="span6 m-wrap smpbrd" placeholder="'+place+'" '+value+' /> <a href="javascript:void(0);" onclick="RemoveUpload(this)" class="remove_button" title="Remove field"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></a> <span class="help-inline"></span> </div> </div> <div class="control-group"> <div class="controls"> <span class="span6"> <input id="facultyResume" name="facultyResume" type="file" class="default smpbrd" multiple /> </span> <span class="help-inline"></span>  </div> </div> </div>';
-// 	$('#addFaculty').append(fieldHTML); //Add field html
-// }
-// function RemoveUpload(elm) {
-// 	$(elm).parent('div').parent('div').parent('div').remove(); //Remove field html
-// }
+var upfiles = 0;
+function AddUpload(elm,name,place,val) {
+	upfiles++;
+	var value="";
+	if(val!="" && val!=null && val!=undefined){
+		value = 'value="'+val+'"';
+	}
+    //var fieldHTML = '<div class="field_wrapper"> <input name="'+name+'" type="text" class="span6 m-wrap smpbrd" placeholder="'+place+'" '+value+' /> <a href="javascript:void(0);" onclick="RemoveTextbox(this)" class="remove_button" title="Remove field"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></a> </div>';
+	var fieldHTML = '<div class="field_wrapper control-group"><div id="dvfacultyName'+upfiles+'" class="control-group">  <div class="controls"> <input id="facultyName'+upfiles+'" name="facultyName" type="text" class="span6 m-wrap vlditm" placeholder="'+place+'" '+value+' /> <a href="javascript:void(0);" onclick="RemoveUpload(this)" class="remove_button" title="Remove field"><i class="fa fa-minus fa-lg" aria-hidden="true"></i></a> <span class="help-inline fnm'+upfiles+'"></span> </div> </div> <div id="dvfacultyResume'+upfiles+'" class="control-group"> <div class="controls"> <span class="span6"> <input id="facultyResume'+upfiles+'" name="facultyResume" type="file" class="default smpbrd" /> </span> <span class="help-inline frs'+upfiles+'""></span>  </div> </div> </div>';
+	$('#addFaculty').append(fieldHTML); //Add field html
+}
+function RemoveUpload(elm) {
+	upfiles--;
+	$(elm).parent('div').parent('div').parent('div').remove(); //Remove field html
+}
 function CharLimit(input, maxChar, val) {
     var len = $(input).val().length;	
 	$('#textCounter' + val).text(len + '/' + maxChar);
@@ -143,45 +145,93 @@ function RemoveSelect(id, val) {
 		} 
 	}
 }
+function CheckFaculty() {
+	var msg = "";
+	for (var j = 0; j <= upfiles; j++) {
+		var x = $('#facultyName'+j).val();
+		if(x == ""){
+			$("#dvfacultyName"+j).addClass("error");
+			$('.fnm'+j).show().html("Please enter faculty name");
+			msg = "1";
+		}
+	}
+	return msg;
+	// var msg = "";
+	// for (var j = 0; j <= upfiles; j++) {
+	// 	var x = $('#facultyName'+j).val();
+	// 	if(x == ""){
+	// 		msg += "Please enter faculty name<br />";
+	// 	}
+	// }
+	// return msg;
+}
 function CheckImages() {
     //var x = document.getElementById("facultyResume");
-	var x = $('#facultyResume')[0];;
-    var msg = "";    
-    if ('files' in x) {
-        if (x.files.length == 0) {
-            //msg = "Select one or more images.";
-        }
-		else if (x.files.length > 3) {
-            msg = "Only 3 files allowed";
-        }
-        else {
-            for (var i = 0; i < x.files.length; i++) {
-                var err = 0;
-                var txt = "";
-                var file = x.files[i];
-                if ('name' in file) {
-                    txt = "<strong>" + file.name + ":</strong>";
-                    if (CheckExtension(file.name) == 1) {
-                        err = 1;
-                        txt += " Invalid file extension,Only pdf and doc/docx files allowed.";
-                    }
-                }                
-                if ('size' in file) {
-                    // if (file.size < 50) {
-                    //     err = 1;
-                    //     txt += "invalid file";
-                    // }
-                    if (file.size > 4194304) {
-                        err = 1;
-                        txt += " File size must be less then 4MB";
-                    }
-                }
-                if (err == 1) {
-                    msg += txt + "<br />";
-                }
-            }
-        }      
-    }
+	var msg = "";
+	// for (var j = 0; j < upfiles; j++) {
+	// 	var x = $('#facultyResume'+j)[0];
+	// 	console.log(x);	
+	// 	console.log(x.files);	
+	// 	if (x!=undefined && 'files' in x) {
+	// 		// $( "files" ).each(function( i ) {
+	// 		// 	var file = x.files[i];
+	// 		// 	if ('name' in file) {
+	// 		// 		console.log("here");	
+	// 		// 		console.log(file.name);	
+	// 		// 	}
+	// 		//   });
+	// 		for (var i = 0; i < x.files.length; i++) {
+	// 			var file = x.files[i];
+	// 			if ('name' in file) {
+	// 				console.log("here");
+	// 				console.log(file.name);	
+	// 			}
+	// 		}
+	// 	}
+	// }
+	for (var j = 0; j <= upfiles; j++) {
+		var x = $('#facultyResume'+j)[0];	
+		//var x = $('#facultyResume'+j)[0];  
+		//console.log(x);	 
+		if (x!=undefined && 'files' in x) {
+			console.log(x.files);
+			if (x.files.length == 0) {
+				//msg = "Select one or more images.";
+			}
+			// else if (x.files.length > 3) {
+			// 	msg += "Only 3 files allowed";
+			// }
+			else {
+				for (var i = 0; i < x.files.length; i++) {
+					var err = 0;
+					var txt = "";
+					var file = x.files[i];
+					if ('name' in file) {
+						txt += "<strong>" + file.name + ":</strong>";
+						if (CheckExtension(file.name) == 1) {
+							err = 1;
+							txt += " Invalid file extension,Only pdf and doc/docx files allowed.";
+						}
+					}                
+					if ('size' in file) {
+						// if (file.size < 50) {
+						//     err = 1;
+						//     txt += "invalid file";
+						// }
+						if (file.size > 4194304) {
+							err = 1;
+							txt += " File size must be less then 4MB.";
+						}
+					}
+					if (err == 1) {
+						$("#dvfacultyResume"+j).addClass("error");
+						$('.frs'+j).show().html(txt);
+						msg = j.toString();
+					}
+				}
+			}      
+		}
+	}
 	return msg;
     // if (msg != null && msg != "") {
     //     $("#errMsg").html(msg);
@@ -206,7 +256,8 @@ function Validate() {
 	var chk=0;
 	$(".help-inline").hide().text("");
 	$(".control-group").removeClass("error");
-	
+
+	var dataid = $("#dataid").val();
 	var courseName = $("#courseName").val();
 	var courseSpecification = $("#courseSpecification").val();
 	var type = $("#type").val();
@@ -298,16 +349,19 @@ function Validate() {
 		$("#dvoffline .help-inline").show().text("Please enter offline course name");
 		chk = 1;
 	}
-	if (facultyName == "") {
-		$("#dvfacultyName").addClass("error");
-		$("#dvfacultyName .help-inline").show().text("Please enter faculty name");
-		chk = 1;
-	}
-	var imgmsg = CheckImages();
-	if (imgmsg!="" && imgmsg!=null) {
-		$("#dvfacultyResume").addClass("error");
-		$("#dvfacultyResume .help-inline").show().html(imgmsg);
-		chk = 1;
+	if(dataid!=null && dataid!=""){
+		var fclmsg = CheckFaculty();
+		if (fclmsg!="" && fclmsg!=null) {
+			//$("#dvfacultyName").addClass("error");
+			//$("#dvfacultyName .help-inline").show().html(fclmsg);
+			chk = 1;
+		}
+		var imgmsg = CheckImages();
+		if (imgmsg!="" && imgmsg!=null) {
+			//$("#dvfacultyResume").addClass("error");
+			//$("#dvfacultyResume .help-inline").show().html(imgmsg);
+			chk = 1;
+		}
 	}
 	// if (facultyResume == "") {
 	// 	$("#dvfacultyResume").addClass("error");
@@ -426,7 +480,7 @@ function Validate() {
 		chk = 1;
 	}
 	
-	console.log(chk);
+	//console.log(chk);
 
 	if (chk==1) {
 		return false;

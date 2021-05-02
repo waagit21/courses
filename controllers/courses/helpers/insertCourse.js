@@ -25,6 +25,12 @@ convertToArray = function(data) {
 
 exports.insertCourse =  (req, res) => {
   try {
+    req.body.facultyInformation = [];
+    var faculty = {
+      facultyName: req.body.facultyName,
+      facultyResume: req.body.facultyResume[0],
+    };
+    req.body.facultyInformation.push(faculty);
     let date = moment().unix().toString();
     req.body.creation_date = date;   
     req.body.createdby = req.user.username; 
@@ -42,6 +48,8 @@ exports.insertCourse =  (req, res) => {
       delete req.body.programType;
     }
     delete req.body.dataid;
+    delete req.body.facultyName;
+    delete req.body.facultyResume;
     var que =  courses.collection.insertOne(req.body);
     if (que) {
       return 1;
@@ -96,6 +104,29 @@ exports.updateCourse = async (req, res) => {
 exports.insertDegree =  (req, res) => {
   try {
     //const value = jwt_decode(req.headers.authorization);
+    // console.log("faculty");
+    // console.log(req.body.facultyName);
+    // console.log(req.body.facultyResume);
+
+    req.body.facultyInformation = [];
+
+    for (var i = 0; i < req.body.facultyName.length; i++) {
+      // var facultyResume = "";
+      // for (var j = 0; j < req.body.facultyResume[i].length; j++) {
+      //   if(j==0){
+      //     facultyResume += req.body.facultyResume[j];
+      //   }
+      //   else{
+      //     facultyResume += ","+req.body.facultyResume[j];
+      //   }        
+      // }
+      var faculty = {
+        facultyName: req.body.facultyName[i],
+        facultyResume: req.body.facultyResume[i],
+      };
+      req.body.facultyInformation.push(faculty);
+    }
+    //console.log(req.body.facultyInformation);
     
     req.body.course = convertToArray(req.body.course);
     req.body.online = convertToArray(req.body.online);
@@ -115,6 +146,8 @@ exports.insertDegree =  (req, res) => {
     req.body.endingDate = dateFormat(req.body.endingDate, "dd mmm, yyyy hh:MM:ss TT");
 
     delete req.body.dataid;
+    delete req.body.facultyName;
+    delete req.body.facultyResume;
     var que =  degree.collection.insertOne(req.body);
     if (que) {
       return 1;
