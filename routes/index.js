@@ -22,12 +22,12 @@ var storage = multer.diskStorage({
     cb(null, 'public/uploads/')
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname)
+    //cb(null, Date.now() + file.originalname)
+    cb(null, functions.getRandom() + file.originalname)
   }
 })
 
-var upload = multer({ storage: storage })
-
+var upload = multer({ storage: storage });
 //#region Home-User
 
 router.get('/', forwardAuthenticated, function(req, res, next) {
@@ -38,6 +38,22 @@ router.get('/', forwardAuthenticated, function(req, res, next) {
   // };
   // var myeml = eml.SendEmail(req, res, msg);
   // console.log(myeml);
+
+  
+ 
+// const form = new FormData();
+// var fs = require('fs');
+// //form.append('my_field', 'my value');
+// //form.append('my_buffer', new Buffer(10));
+// form.append('facultyInformation', fs.createReadStream('/uploads/newfile.pdf'));
+
+// axios.post('https://demoherocourse.herokuapp.com/images', form, { headers: form.getHeaders() }).then(function (response) {
+//   console.log(response.data);
+// })
+// .catch(function (error) {
+//   console.log(error);
+// });
+
   res.render('index', { title: 'Admin Panel', layout: 'home.hbs', custom:"index" });
 });
 
@@ -370,7 +386,7 @@ router.post('/updcourse', upload.array('facultyResume', 1), async function(req, 
   var val =0;
   var data = {}; 
   var arrfiles = [];
-  try {
+  try {  
     if (req.files && req.files.length>0) {
       var fileKeys = Object.keys(req.files);
       fileKeys.forEach(function(key) {
@@ -388,6 +404,12 @@ router.post('/updcourse', upload.array('facultyResume', 1), async function(req, 
     }
     else{
       data = await courses.insertCourse(req);
+      console.log("data");
+      console.log(data);
+      if (req.files && req.files.length>0){
+        req.objid = data;
+        var img = await courses.updateCourseFile(req); 
+      }
     }
     if(data!==undefined && data!=null && data!="") {
       var msg = (val==0) ? "Course added successfull" : "Course updated successfull";
@@ -422,16 +444,22 @@ router.post('/upddegree', upload.array('facultyResume', 10), async function(req,
           //files.push(req.files[key]);
       });
       req.body.facultyResume = arrfiles;
-    } 
+    }
     if(req.body.dataid!="" && req.body.dataid!=null){
-      if (!req.files || req.files.length==0) {
-        delete req.body.facultyResume;
-      }
+      // if (!req.files || req.files.length==0) {
+      //   delete req.body.facultyResume;
+      // }
       val=1;
       data = await courses.updateDegree(req);
     }
     else{
       data = await courses.insertDegree(req);
+      console.log("data");
+      console.log(data);
+      if (req.files && req.files.length>0){
+        req.objid = data;
+        var img = await courses.updateDegreeFile(req); 
+      }
     }
     if(data!==undefined && data!=null && data!="") {
       var msg = (val==0) ? "Degree added successfull" : "Degree updated successfull";
@@ -447,8 +475,7 @@ router.post('/upddegree', upload.array('facultyResume', 10), async function(req,
   catch (err){
     console.log(err);
     utils.logException(err,req,"upddegree");
-  }
-  
+  }  
 });
 //#endregion Course
 

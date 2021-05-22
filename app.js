@@ -14,7 +14,8 @@ const { ensureAuthenticated, forwardAuthenticated } = require('./middleware/auth
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 var connectDB=require('./config');
-
+const configkeys = require("./config/keys");
+var utils = require('./config/utils');
 
 var app = express();
 var exphbs = hbs.create({
@@ -91,12 +92,13 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
+  res.locals.siteurl = configkeys.siteurl();
   //res.locals.messages = require('express-messages')(req, res);
   next();
 });
 
 app.all('*', function (req, res, next) {
-  if (req.path == '/' || req.path == '/login') {
+  if (req.path == '/' || req.path == '/login' || req.path.startsWith("/api/")){
     return next();
   }
   ensureAuthenticated(req, res, next);
@@ -126,9 +128,10 @@ app.use(function(err, req, res, next) {
 });
 
 process.on('uncaughtException', function (err) {
-  console.error('An unnnncaught error occurred!');
+  console.error('An uncaught error occurred!');
   console.error(err);
   console.error(err.stack);
+  utils.logException(err,null,"uncaughtException");
   //process.exit(1);
 });
 

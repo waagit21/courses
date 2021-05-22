@@ -35,10 +35,17 @@ function formatNumDate(dt) {
     return year + "/" + setmonth + "/" + setday;
 }
 
+function getRandom(min=1000, max=9999) {  
+    return Math.floor(
+      Math.random() * (max - min) + min
+    )
+  }
+
 module.exports={
     formatDateTime:formatDateTime,
     formatDate:formatDate,
     formatNumDate:formatNumDate,
+    getRandom:getRandom,
 }
 
 // module.exports = {

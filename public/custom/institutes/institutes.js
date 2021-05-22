@@ -19,6 +19,9 @@ function GetMore() {
 		async: false,
 		dataType:"json", // <-- I use plain text cause the reals rows have got a lot of input select and this way is more simple than others
 		url: "api/getinstitutes",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function(data) {
 			console.log(data.data);
 			// oTable.rows.add(data.data).draw( false );
@@ -54,6 +57,9 @@ $('#institutes a.delete').live('click', function (e) {
 		url:'api/insdel/' + delid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				oTable.fnDeleteRow(nRow);
@@ -89,6 +95,9 @@ $('#institutes a.suspend').live('click', function (e) {
 		url:'api/insblk/' + uid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				$link.html("<span class='label label-warning'><i class='fa fa-pause' aria-hidden='true'></i></span>");
@@ -122,6 +131,9 @@ $('#institutes a.resume').live('click', function (e) {
 		url:'api/insrsm/' + uid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				$link.html("<span class='label label-success'><i class='fa fa-check' aria-hidden='true'></i></span>");

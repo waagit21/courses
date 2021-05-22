@@ -1,9 +1,10 @@
 const LocalStrategy = require('passport-local').Strategy;
+
 const users = require('../models/users');
 //const roles = require('../models/roles');
-const config = require('../config');
+//const config = require('../config');
 const bcrypt = require('bcrypt');
-var endecode = require('../config/endecode');
+var endecode = require('../config/endecode');;
 
 module.exports = function(passport){
   // Local Strategy
@@ -41,7 +42,8 @@ module.exports = function(passport){
         enid: endecode.encryptstr(user.id),
         name: user.name,
         username: user.username,
-        type: user.type
+        type: user.type,
+        token: endecode.settoken(user.id)
       };
       done(err, thisuser);
     });

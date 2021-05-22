@@ -3,6 +3,9 @@ function ChangeStatus(uid, st) {
 		url: (st==0) ? 'api/crsblk/' + uid : 'api/crsrsm/' + uid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				if(st==0) {

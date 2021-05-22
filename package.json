@@ -7,6 +7,7 @@
     "nodemon": "nodemon ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
@@ -17,7 +18,9 @@
     "express-handlebars": "^5.2.0",
     "express-messages": "^1.0.1",
     "express-session": "^1.17.1",
+    "form-data": "^4.0.0",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "mongoose": "^5.10.15",

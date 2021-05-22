@@ -17,6 +17,9 @@ jQuery('#webusers_wrapper .dataTables_length select').addClass("m-wrap xsmall");
 			url:'api/webblk/' + uid,
 			type:"GET",
 			dataType:"json",
+			headers: {
+				'authorization': usrtkn,
+			},
 			success: function (result,status,xhr) {
 				if (result != null && result.success==true && result.data>0) {
 					$link.html("<span class='label label-warning'><i class='fa fa-pause' aria-hidden='true'></i></span>");
@@ -50,6 +53,9 @@ jQuery('#webusers_wrapper .dataTables_length select').addClass("m-wrap xsmall");
 			url:'api/webrsm/' + uid,
 			type:"GET",
 			dataType:"json",
+			headers: {
+				'authorization': usrtkn,
+			},
 			success: function (result,status,xhr) {
 				if (result != null && result.success==true && result.data>0) {
 					$link.html("<span class='label label-success'><i class='fa fa-check' aria-hidden='true'></i></span>");

@@ -13,6 +13,9 @@ $('#admusers a.delete').live('click', function (e) {
 		url:'api/admdel/' + delid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				oTable.fnDeleteRow(nRow);
@@ -48,6 +51,9 @@ $('#admusers a.suspend').live('click', function (e) {
 		url:'api/admblk/' + uid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				$link.html("<span class='label label-warning'><i class='fa fa-pause' aria-hidden='true'></i> </span>");
@@ -81,6 +87,9 @@ $('#admusers a.resume').live('click', function (e) {
 		url:'api/admrsm/' + uid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				$link.html("<span class='label label-success'><i class='fa fa-check' aria-hidden='true'></i> </span>");

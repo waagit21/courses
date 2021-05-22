@@ -1,5 +1,5 @@
 const {getCourses}=require('./helpers/getCourses'),
-{insertCourse, updateCourse, insertDegree, updateDegree}=require("./helpers/insertCourse"),
+{insertCourse, updateCourse, insertDegree, updateDegree, updateCourseFile, updateDegreeFile}=require("./helpers/insertCourse"),
 {getAllCourses,getCourseById,updAllCourses,getCoursesCount}=require('./helpers/getAllCourses'),
 //{insertDegree}=require("./helpers/insertDegree")
 { navbarSearch } = require('./helpers/navbarSearch')
@@ -16,8 +16,10 @@ module.exports={
     getCoursesCount:getCoursesCount,
     insertCourse:insertCourse,
     updateCourse:updateCourse,
+    updateCourseFile:updateCourseFile,
     insertDegree:insertDegree,
     updateDegree:updateDegree,
+    updateDegreeFile:updateDegreeFile,
     searchCourse:searchCourse,
     navbarSearch:navbarSearch,
     updCrsDel:updCrsDel,

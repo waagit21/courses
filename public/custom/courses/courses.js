@@ -17,6 +17,9 @@ $('#courses a.delete').live('click', function (e) {
 		url:'api/crsdel/' + delid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				oTable.fnDeleteRow(nRow);
@@ -52,6 +55,9 @@ $('#courses a.suspend').live('click', function (e) {
 		url:'api/crsblk/' + uid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				$link.html("<span class='label label-warning'><i class='fa fa-pause' aria-hidden='true'></i></span>");
@@ -85,6 +91,9 @@ $('#courses a.resume').live('click', function (e) {
 		url:'api/crsrsm/' + uid,
 		type:"GET",
 		dataType:"json",
+		headers: {
+			'authorization': usrtkn,
+		},
 		success: function (result,status,xhr) {
 			if (result != null && result.success==true && result.data>0) {
 				$link.html("<span class='label label-success'><i class='fa fa-check' aria-hidden='true'></i></span>");

@@ -1,9 +1,13 @@
 const courses=require('../../../models/courses');
 const degree=require('../../../models/degree');
 //const degree=require('../../../models/degree');
+const configkeys = require("../../../config/keys")
 const jwt_decode=require("jwt-decode");
 const moment=require('moment');
 var dateFormat = require("dateformat");
+const axios = require('axios');
+const FormData = require('form-data');
+var fs = require('fs');
 
 isArray = function(a) {
   return (!!a) && (a.constructor === Array);
@@ -24,48 +28,58 @@ convertToArray = function(data) {
 };
 
 exports.insertCourse =  (req, res) => {
-  try {
-    req.body.facultyInformation = [];
-    var faculty = {
-      facultyName: req.body.facultyName,
-      facultyResume: req.body.facultyResume[0],
-    };
-    req.body.facultyInformation.push(faculty);
-    let date = moment().unix().toString();
-    req.body.creation_date = date;   
-    req.body.createdby = req.user.username; 
-    req.body.owner_id = req.user.id;
-    req.body.owner_type = 1;    
-    req.body.isDegree = false;
-    req.body.status = parseInt(req.body.status);
+    return new Promise((resolve, reject) => {
+      req.body.facultyInformation = [];
+      var faculty = {
+        facultyName: req.body.facultyName,
+        facultyResume: req.body.facultyResume[0],
+      };
+      req.body.facultyInformation.push(faculty);
+      let date = moment().unix().toString();
+      req.body.creation_date = date;   
+      req.body.createdby = req.user.username; 
+      req.body.owner_id = req.user.id;
+      req.body.owner_type = 1;    
+      req.body.isDegree = false;
+      req.body.status = parseInt(req.body.status);
 
-    req.body.startingDate = dateFormat(req.body.startingDate, "dd mmm, yyyy hh:MM:ss TT");
-    req.body.endingDate = dateFormat(req.body.endingDate, "dd mmm, yyyy hh:MM:ss TT");
+      req.body.startingDate = dateFormat(req.body.startingDate, "dd mmm, yyyy hh:MM:ss TT");
+      req.body.endingDate = dateFormat(req.body.endingDate, "dd mmm, yyyy hh:MM:ss TT");
 
-    if(req.body.part=="No"){
-      delete req.body.programSpecs;
-      delete req.body.programName;
-      delete req.body.programType;
-    }
-    delete req.body.dataid;
-    delete req.body.facultyName;
-    delete req.body.facultyResume;
-    var que =  courses.collection.insertOne(req.body);
-    if (que) {
-      return 1;
-    }
-    else {
-      return null;
-    }
-  } 
-  catch (err) {
-    console.log(err);
-    utils.logException(err,req,"insertCourse.insertCourse");
-    return null;
-  }
+      if(req.body.part=="No"){
+        delete req.body.programSpecs;
+        delete req.body.programName;
+        delete req.body.programType;
+      }
+      delete req.body.dataid;
+      req.facultyName = req.body.facultyName;
+      delete req.body.facultyName;
+      delete req.body.facultyResume;
+      courses.collection.insertOne(req.body).then(result => {
+        console.log(result);
+        resolve(result.insertedId);
+      }).catch(err => {
+        utils.logException(err,req,"insertCourse.insertCourse");
+        reject(null);
+      });
+    });
+  //try {
+    //var que = courses.collection.insertOne(req.body);
+    // if (que) {
+    //   return 1;
+    // }
+    // else {
+    //   return null;
+    // }
+  // } 
+  // catch (err) {
+  //   console.log(err);
+  //   utils.logException(err,req,"insertCourse.insertCourse");
+  //   return null;
+  // }
 }
 
-exports.updateCourse = async (req, res) => {
+exports.updateCourse =  (req, res) => {
   try {
     let date = moment().unix().toString();
     req.body.updation_date = date;
@@ -82,7 +96,7 @@ exports.updateCourse = async (req, res) => {
     }
     var theid = req.body.dataid;
     delete req.body.dataid;
-    var que = await courses.findByIdAndUpdate({_id: theid},req.body, function(err, doc){
+    var que =  courses.findByIdAndUpdate({_id: theid},req.body, function(err, doc){
         if(err){
           return null;
         }
@@ -100,16 +114,49 @@ exports.updateCourse = async (req, res) => {
   }
 }
 
+exports.updateCourseFile =  (req, res) => {
+  try {
+    const form = new FormData();    
+    //form.append('my_field', 'my value');
+    //form.append('my_buffer', new Buffer(10));
+    form.append('facultyInformation', fs.createReadStream(req.files[0].path)); //"C:\\Users\\pc\\programs\\admin\\"
+    axios.post(configkeys.siteurl() + '/images', form, { headers: form.getHeaders() }).then(function (response) {
+      var facultyInformation = [];
+      var faculty = {
+        facultyName: req.facultyName,
+        facultyResume: response.data.data[0].path,
+      };
+      facultyInformation.push(faculty);
+      var que = courses.findByIdAndUpdate({_id: req.objid},{ facultyInformation: facultyInformation }, function(err, doc){
+        if(err){
+          return null;
+        }
+      });
+      if (que) {
+        return 1;
+      }
+      else {
+        return null;
+      }      
+    }).catch(function (err) {
+      console.log(err);
+      utils.logException(err,req,"insertCourse.updateCourseFile");
+      return null;
+    });
+  } catch (err) {
+    console.log(err);
+    utils.logException(err,req,"insertCourse.updateCourseFile");
+    return null;
+  }
+}
 
 exports.insertDegree =  (req, res) => {
-  try {
+  return new Promise((resolve, reject) => {
     //const value = jwt_decode(req.headers.authorization);
     // console.log("faculty");
     // console.log(req.body.facultyName);
     // console.log(req.body.facultyResume);
-
     req.body.facultyInformation = [];
-
     for (var i = 0; i < req.body.facultyName.length; i++) {
       // var facultyResume = "";
       // for (var j = 0; j < req.body.facultyResume[i].length; j++) {
@@ -146,63 +193,65 @@ exports.insertDegree =  (req, res) => {
     req.body.endingDate = dateFormat(req.body.endingDate, "dd mmm, yyyy hh:MM:ss TT");
 
     delete req.body.dataid;
+    req.facultyName = req.body.facultyName;
     delete req.body.facultyName;
     delete req.body.facultyResume;
-    var que =  degree.collection.insertOne(req.body);
-    if (que) {
-      return 1;
-    }
-    else {
-      return null;
-    }
-    return null;
+    degree.collection.insertOne(req.body).then(result => {
+      console.log(result);
+      resolve(result.insertedId);
+    }).catch(err => {
+      utils.logException(err,req,"insertCourse.insertCourse");
+      reject(null);
+    });
+  });
 
-    // convertArray = function(a) {
-    //   var arr = [];      
-    //   return arr.push(a);
-    // };
-    //req.body.course = (!isArray(req.body.course)) ? convertArray(req.body.course) : req.body.course;
-    // if(!isArray(req.body.course)){
-    //   var val = req.body.course;
-    //   req.body.course = [];      
-    //   req.body.course.push(val);
-    // }
+  // try {
+  //   // convertArray = function(a) {
+  //   //   var arr = [];      
+  //   //   return arr.push(a);
+  //   // };
+  //   //req.body.course = (!isArray(req.body.course)) ? convertArray(req.body.course) : req.body.course;
+  //   // if(!isArray(req.body.course)){
+  //   //   var val = req.body.course;
+  //   //   req.body.course = [];      
+  //   //   req.body.course.push(val);
+  //   // }
 
-    // req.body.field_array=[];
-    // if(isArray(req.body.field_name)){      
-    //   var arr = req.body.field_name;
-    //   for (var key in req.body.field_name) {
-    //     req.body.field_array.push(req.body.field_name[key]);
-    //   }
-    // }
-    // else{
-    //   req.body.field_array.push(req.body.field_name);
-    // } 
+  //   // req.body.field_array=[];
+  //   // if(isArray(req.body.field_name)){      
+  //   //   var arr = req.body.field_name;
+  //   //   for (var key in req.body.field_name) {
+  //   //     req.body.field_array.push(req.body.field_name[key]);
+  //   //   }
+  //   // }
+  //   // else{
+  //   //   req.body.field_array.push(req.body.field_name);
+  //   // } 
 
-    // for ( const [key,value] of Object.entries( req.body.field_name ) ) {
-    //   console.log(key, value);
-    // }
-    // req.body.field_name.forEach((key, index) => {
-    //     console.log(key+" "+ req.body.field_name[key]);
-    //     req.body.field_array.push(req.body.field_name[key]);
-      // });
+  //   // for ( const [key,value] of Object.entries( req.body.field_name ) ) {
+  //   //   console.log(key, value);
+  //   // }
+  //   // req.body.field_name.forEach((key, index) => {
+  //   //     console.log(key+" "+ req.body.field_name[key]);
+  //   //     req.body.field_array.push(req.body.field_name[key]);
+  //     // });
 
 
-    // await courses.collection.insertOne(req.body,function(err, doc){
-    //   if(err){
-    //     utils.logException(err,req,"insertCourse.insertDegree");
-    //     return null;
-    //   } 
-    //   else {
-    //     return doc._id;
-    //   }
-    // });    
-  } 
-  catch (err) {
-    console.log(err);
-    utils.logException(err,req,"insertCourse.insertDegree");
-    return null;
-  }
+  //   // await courses.collection.insertOne(req.body,function(err, doc){
+  //   //   if(err){
+  //   //     utils.logException(err,req,"insertCourse.insertDegree");
+  //   //     return null;
+  //   //   } 
+  //   //   else {
+  //   //     return doc._id;
+  //   //   }
+  //   // });    
+  // } 
+  // catch (err) {
+  //   console.log(err);
+  //   utils.logException(err,req,"insertCourse.insertDegree");
+  //   return null;
+  // }
 }
 
 exports.updateDegree = async (req, res) => {
@@ -248,6 +297,46 @@ exports.updateDegree = async (req, res) => {
   } catch (err) {
     console.log(err);
     utils.logException(err,req,"insertCourse.updateDegree");
+    return null;
+  }
+}
+
+exports.updateDegreeFile =  (req, res) => {
+  try {
+    const form = new FormData();    
+    //form.append('my_field', 'my value');
+    //form.append('my_buffer', new Buffer(10));
+    for (var i = 0; i < req.files.length; i++) {
+      form.append('facultyInformation', fs.createReadStream(req.files[i].path));
+    }
+    axios.post(configkeys.siteurl() + '/images', form, { headers: form.getHeaders() }).then(function (response) {
+      var facultyInformation = [];
+      for (var i = 0; i < req.facultyName.length; i++) {
+        var faculty = {
+          facultyName: req.facultyName[i],
+          facultyResume: response.data.data[i].path,
+        };
+       facultyInformation.push(faculty);
+      }
+      var que = courses.findByIdAndUpdate({_id: req.objid},{ facultyInformation: facultyInformation }, function(err, doc){
+        if(err){
+          return null;
+        }
+      });
+      if (que) {
+        return 1;
+      }
+      else {
+        return null;
+      }      
+    }).catch(function (err) {
+      console.log(err);
+      utils.logException(err,req,"insertCourse.updateDegreeFile");
+      return null;
+    });
+  } catch (err) {
+    console.log(err);
+    utils.logException(err,req,"insertCourse.updateDegreeFile");
     return null;
   }
 }
