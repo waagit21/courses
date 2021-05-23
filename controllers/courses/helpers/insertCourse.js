@@ -127,9 +127,15 @@ exports.updateCourseFile =  (req, res) => {
         facultyResume: response.data.data[0].path,
       };
       facultyInformation.push(faculty);
-      var que = courses.findByIdAndUpdate({_id: req.objid},{ facultyInformation: facultyInformation }, function(err, doc){
-        if(err){
+      var que = courses.findByIdAndUpdate({_id: req.objid},{ facultyInformation: facultyInformation }, function(error, doc){
+        if(error){
           return null;
+        }
+        else{
+          fs.unlink(req.files[0].path,function(err){
+            if(err) return console.log(err);
+            console.log('File deleted successfully');
+          });  
         }
       });
       if (que) {
@@ -318,9 +324,17 @@ exports.updateDegreeFile =  (req, res) => {
         };
        facultyInformation.push(faculty);
       }
-      var que = courses.findByIdAndUpdate({_id: req.objid},{ facultyInformation: facultyInformation }, function(err, doc){
-        if(err){
+      var que = courses.findByIdAndUpdate({_id: req.objid},{ facultyInformation: facultyInformation }, function(error, doc){
+        if(error){
           return null;
+        }
+        else{
+          for (var i = 0; i < req.facultyName.length; i++) {
+            fs.unlink(req.files[i].path,function(err){
+              if(err) return console.log(err);
+              console.log('File deleted successfully');
+            }); 
+          }           
         }
       });
       if (que) {
