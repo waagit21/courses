@@ -186,7 +186,7 @@
                   <div class="controls">
                     <select id="courseCountry" name="courseCountry" class="span6 m-wrap vlditm">
                       {{#each bsdata.countries as |item|}}  
-                         <option value="{{item.[0]}}" {{#ifCond item '==' ../data.type}} selected="selected" {{/ifCond}}>{{item.[0]}}</option>
+                         <option value="{{item.[0]}}" {{#ifCond item.[0] '==' ../data.courseCountry}} selected="selected" {{/ifCond}}>{{item.[0]}}</option>
                       {{/each}}
                     </select>
                     <span class="help-inline"></span>
@@ -295,7 +295,10 @@
                   <label class="control-label">Currency<span class="required">*</span></label>
                   <div class="controls">
                     <select id="currency" name="currency" class="span6 m-wrap vlditm">  
-                         <option value="$">$</option>
+                      {{#each bsdata.currencies as |item|}}  
+                         <option value="{{item.[0]}}" {{#ifCond item.[0] '==' ../data.currency}} selected="selected" {{/ifCond}}>{{item.[0]}}</option>
+                      {{/each}}
+                         {{!-- <option value="$">$</option> --}}
                     </select>
                     <span class="help-inline"></span>
                   </div>
