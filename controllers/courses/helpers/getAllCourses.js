@@ -23,6 +23,9 @@ exports.getAllCourses = function(req,res) {
     else if (req.query.web !== undefined && req.query.web !== "") {
       input = { owner_id: endecode.decryptstr(req.query.web) , owner_type: 0 };
     }
+    if(req.user.type==4){
+      input = { owner_id: req.user.id , owner_type: 1 };
+    }
     //const input = { "courseName":  "My second Degree" };
     courses.find(input).lean().then(function(doc) { //.sort({creation_date:-1})
         resolve(doc);        
