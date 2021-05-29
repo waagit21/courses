@@ -6,6 +6,7 @@ $(document).ready(function() {
 		$("#courseLanguage").prepend("<option value='' selected='selected'>Please Select</option>");	
 		$("#courseCountry").prepend("<option value='' selected='selected'>Please Select</option>");		
 		$("#durationFor").prepend("<option value='' selected='selected'>Please Select</option>");
+		$("#currency").prepend("<option value='' selected='selected'>Please Select</option>");
 		$("#status").prepend("<option value='' selected='selected'>Please Select</option>");
 	}
 
@@ -349,7 +350,7 @@ function Validate() {
 		$("#dvoffline .help-inline").show().text("Please enter offline course name");
 		chk = 1;
 	}
-	if(dataid!=null && dataid!=""){
+	if(dataid==null || dataid==""){
 		var fclmsg = CheckFaculty();
 		if (fclmsg!="" && fclmsg!=null) {
 			//$("#dvfacultyName").addClass("error");

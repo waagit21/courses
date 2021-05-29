@@ -6,6 +6,7 @@ $(document).ready(function() {
 		$("#courseLanguage").prepend("<option value='' selected='selected'>Please Select</option>");	
 		$("#courseCountry").prepend("<option value='' selected='selected'>Please Select</option>");		
 		$("#durationFor").prepend("<option value='' selected='selected'>Please Select</option>");
+		$("#currency").prepend("<option value='' selected='selected'>Please Select</option>");		
 		$("#status").prepend("<option value='' selected='selected'>Please Select</option>");
 	}
 
