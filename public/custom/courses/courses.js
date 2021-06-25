@@ -9,16 +9,19 @@ $(document).ready(function() {
 		$("#searchpanel").hide();
 	}
 	else{
-		lmt = ($('#lmt').val() != "") ? $('#lmt').val() : 0;
-		ttl = ($('#ttl').val() != "") ? $('#ttl').val() : 0;
+		lmt = parseInt(($('#lmt').val() != "") ? $('#lmt').val() : 0);
+		ttl = parseInt(($('#ttl').val() != "") ? $('#ttl').val() : 0);
 		crt = lmt;
-
-		$('#current').html(crt);
-		$('#total').html(ttl);
+		if(ttl<crt) {
+			crt=ttl;
+			$('#loadmore').hide();
+		}
 		if ( ttl == 0 ){
 			$("#loadshow").hide();
 		}
-	}	
+		$('#current').html(crt);
+		$('#total').html(ttl);		
+	}		
 	$('#startingDate').datepicker({
 		format: 'yyyy/mm/dd',
 		inline: true,
