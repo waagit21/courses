@@ -1,7 +1,7 @@
 const courses=require('../../../models/courses');
 const degree=require('../../../models/degree');
 //const degree=require('../../../models/degree');
-const configkeys = require("../../../config/keys")
+const configkeys = require("../../../config/default.json");
 const jwt_decode=require("jwt-decode");
 const moment=require('moment');
 var dateFormat = require("dateformat");
@@ -120,7 +120,7 @@ exports.updateCourseFile =  (req, res) => {
     //form.append('my_field', 'my value');
     //form.append('my_buffer', new Buffer(10));
     form.append('facultyInformation', fs.createReadStream(req.files[0].path)); //"C:\\Users\\pc\\programs\\admin\\"
-    axios.post(configkeys.siteurl() + '/images', form, { headers: form.getHeaders() }).then(function (response) {
+    axios.post(configkeys.siteurl + '/images', form, { headers: form.getHeaders() }).then(function (response) {
       var facultyInformation = [];
       var faculty = {
         facultyName: req.facultyName,
@@ -315,7 +315,7 @@ exports.updateDegreeFile =  (req, res) => {
     for (var i = 0; i < req.files.length; i++) {
       form.append('facultyInformation', fs.createReadStream(req.files[i].path));
     }
-    axios.post(configkeys.siteurl() + '/images', form, { headers: form.getHeaders() }).then(function (response) {
+    axios.post(configkeys.siteurl + '/images', form, { headers: form.getHeaders() }).then(function (response) {
       var facultyInformation = [];
       for (var i = 0; i < req.facultyName.length; i++) {
         var faculty = {

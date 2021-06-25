@@ -14,7 +14,7 @@ const { ensureAuthenticated, forwardAuthenticated } = require('./middleware/auth
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 var connectDB=require('./config');
-const configkeys = require("./config/keys");
+const configkeys = require("./config/default.json");
 var utils = require('./config/utils');
 
 var app = express();
@@ -49,6 +49,9 @@ var exphbs = hbs.create({
               return options.inverse(this);
       }
     }
+    // jprs: function (str) {
+    //   return JSON.parse(JSON.stringify(str));
+    // }
     // ifCond: function(v1, v2, options) {
     //   if(v1 === v2) {
     //     return options.fn(this);
@@ -60,7 +63,6 @@ var exphbs = hbs.create({
   defaultLayout: 'layout', 
   layoutsDir: __dirname + '/views/layouts/'
 });
-
 app.engine('hbs', exphbs.engine);
 // view engine setup
 //app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/'}));
@@ -92,7 +94,7 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
-  res.locals.siteurl = configkeys.siteurl();
+  res.locals.siteurl = configkeys.siteurl;
   //res.locals.messages = require('express-messages')(req, res);
   next();
 });

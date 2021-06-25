@@ -110,6 +110,9 @@ body {
 .clrorange{
 	color: orange;
 }
+.clrpurple{
+	color: purple;
+}
 .pointer {cursor: pointer !important;}
 
 table.dataTable thead {
@@ -117,7 +120,24 @@ table.dataTable thead {
 	color:white;
   }
 
+  .lb-sm {
+	font-size: 12px;
+  }
+  
+  .lb-md {
+	font-size: 16px;
+  }
+  
+  .lb-lg {
+	font-size: 27px;
+  }
 
+.right{
+	float:right !important;
+}
+.left{
+	float:left !important;
+}
 
 @media (max-width:979px) { 
 	.page-sidebar {

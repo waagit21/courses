@@ -1,3 +1,39 @@
+var lmt=0;
+var ttl=0;
+var crt=0;
+$(document).ready(function() {
+	var ld= getParameterByName('ld');
+	if (ld!= null && ld=="all" ){
+		$("#loadall").hide();
+		$("#loadshow").hide();
+		$("#searchpanel").hide();
+	}
+	else{
+		lmt = ($('#lmt').val() != "") ? $('#lmt').val() : 0;
+		ttl = ($('#ttl').val() != "") ? $('#ttl').val() : 0;
+		crt = lmt;
+
+		$('#current').html(crt);
+		$('#total').html(ttl);
+		if ( ttl == 0 ){
+			$("#loadshow").hide();
+		}
+	}	
+	$('#startingDate').datepicker({
+		format: 'yyyy/mm/dd',
+		inline: true,
+		firstDay: 1,
+		showOtherMonths: true,
+		dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+	}).datepicker("setDate", addDays(new Date(), -3));
+	$('#endingDate').datepicker({
+		format: 'yyyy/mm/dd',
+		inline: true,
+		firstDay: 1,
+		showOtherMonths: true,
+		dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+	}).datepicker("setDate", new Date());
+});
 var oTable = $('#courses').dataTable({
 	"sPaginationType": "full_numbers",
 	"iDisplayLength": 50,
@@ -5,6 +41,111 @@ var oTable = $('#courses').dataTable({
 });
 jQuery('#courses_wrapper .dataTables_filter input').addClass("m-wrap medium"); // modify table search input
 jQuery('#courses_wrapper .dataTables_length select').addClass("m-wrap xsmall"); // modify table per page dropdown
+oTable.fnSetColumnVis( 0, false, false );
+
+var pg = 1;
+var srh = 0;
+function GetMore() {
+	if(srh==0){
+		GetMoreData();
+	}
+	else{
+		GetMoreSearch();
+	}
+}
+function GetSearch() {
+	oTable.fnClearTable();
+	pg=0;
+	srh=1;
+	crt=0;
+	ttl=0;
+	GetMoreSearch();
+}
+function GetMoreData() {
+	pg=pg+1;
+	$.ajax({
+		type: "GET",
+		async: false,
+		dataType:"json",
+		url: "api/getcourses/"+pg,
+		headers: {
+			'authorization': usrtkn,
+		},
+		success: function(data) {
+			SuccessHandler(data);							
+		},
+		error: function (request, status, error) {
+			console.log("error");
+			console.log(request);
+			console.log(status);
+			console.log(error);
+		}
+	});
+}
+function GetMoreSearch() {	
+	pg = pg+ 1;
+	$.ajax({
+		type: "POST",
+		async: false,
+		dataType:"json",
+		url: "api/srhcourses/"+pg,
+		data: JSON.stringify( { "startingDate": $('#startingDate').val(), "endingDate": $('#endingDate').val(), "status": $('#status').val() } ),
+		contentType: 'application/json',
+		headers: {
+			'authorization': usrtkn,
+		},
+		success: function(data) {
+			SuccessHandler(data);				
+		},
+		error: function (request, status, error) {
+			console.log("error");
+			console.log(request);
+			console.log(status);
+			console.log(error);
+		}
+	});
+}
+
+function SuccessHandler(data) {
+	var oSettings = oTable.fnSettings();
+	var crntpg = Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength );
+	console.log(data.data);
+	// oTable.rows.add(data.data).draw( false );
+	var j =0;
+	$.each(data.data.docs, function (i, obj) {
+		var rowIndex =  oTable.fnAddData( [
+			parseInt(crt) + parseInt(i),
+			data.data.docs[i].courseName,
+			data.data.docs[i].isDegree == true ? '<span class="clrblue">Degree</span>' : '<span class="clrred">Course</span>',
+			data.data.docs[i].type,
+			data.data.docs[i].courseSpecification,
+			data.data.docs[i].courseLanguage,
+			data.data.docs[i].courseCountry,
+			data.data.docs[i].owner_type == 1 ? '<span class="clrorange">Admin</span>' : '<span class="clrbrown">Web</span>',
+			unixlocalDateTime(data.data.docs[i].creation_date),
+			data.data.docs[i].status == 0 ? '<a href="" class="suspend" data-toggle="tooltip" title="Approved"><span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i></span></a>' : '<a href="" class="resume" data-toggle="tooltip" title="Suspended"><span class="label label-warning"><i class="fa fa-pause" aria-hidden="true"></i></span></a>',
+			data.data.docs[i].isDegree == true ? '<a href="degreesview?id=' + data.data.docs[i]._id + '" class="btn mini blue" title="View Degree"><i class="icon-share"></i></a> &nbsp; <a href="degreesedit?id=' + data.data.docs[i]._id + '" class="btn mini purple" title="Edit Degree"><i class="icon-edit"></i></a> &nbsp; <a href="" class="btn mini black delete" title="Delete Degree"><i class="icon-trash"></i></a>' : '<a href="coursesview?id=' + data.data.docs[i]._id + '" class="btn mini blue" title="View Course"><i class="icon-share"></i></a> &nbsp; <a href="coursesedit?id=' + data.data.docs[i]._id + '" class="btn mini purple" title="Edit Course"><i class="icon-edit"></i></a> &nbsp; <a href="" class="btn mini black delete" title="Delete Course"><i class="icon-trash"></i></a>'
+		] );
+		var row = oTable.fnGetNodes(rowIndex);
+		$(row).attr('data-uid', data.data.docs[i]._id);
+		//$(row).addClass("editable");
+		$('td:eq(2),td:eq(3),td:eq(4),td:eq(5),td:eq(6),td:eq(7)', row).addClass("hidden-480");
+		j++;				
+	});		
+	crt = parseInt(crt) + parseInt(j);
+	ttl = parseInt(data.data.totalDocs);
+	$('#current').html(crt);
+	$('#total').html(ttl);
+	oTable.fnPageChange(crntpg);
+	//oTable.fnPageChange('next');
+	//oTable.ajax.reload(null, false);
+	if(crt==ttl){
+		$('#loadmore').hide();
+	}
+	else {
+		$('#loadmore').show();
+	}
+}
 
 $('#courses a.delete').live('click', function (e) {
 	e.preventDefault();

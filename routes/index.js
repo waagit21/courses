@@ -274,14 +274,28 @@ router.post('/useradmaddml',upload.array('blogimage', 5), async function(req, re
 });
 
 router.get('/webusers', async function(req, res, next) {
-  
   var data = {};
-  data = await users.getWebUsers(req);
+  var pgdata = {};
   var error = "";
-  if(data === undefined || data === null || data.length === 0){
-    error = "No data found";
+  if (req.query.ld !== undefined && req.query.ld !== "" && req.query.ld=="all") {
+    data = await users.getAllWebUsers(req);
+    if(data === undefined || data === null || data.length === 0){
+      error = "No data found";
+    }
+    else {
+      pgdata.docs = data;
+    }
   }
-  res.render('webusers', { title: 'Web Users', webusers:true, prntwebusers:true, custom:"webusers", items: data, error: error});
+  else{
+    data = await users.getWebUsers(req);
+    if(data === undefined || data === null || data.length === 0){
+      error = "No data found";
+    }
+    else {
+      pgdata = JSON.parse(JSON.stringify(data));
+    } 
+  } 
+  res.render('webusers', { title: 'Web Users', webusers:true, prntwebusers:true, custom:"webusers", items: pgdata, error: error}); 
 });
 
 router.get('/webusersview', async function(req, res, next) { 
@@ -304,15 +318,31 @@ router.get('/webusersview', async function(req, res, next) {
 //#region Course
 router.get('/courses', async function(req, res, next) { 
   var data = {};
+  var pgdata = {};
+  var error = "";
   var userdata = {};
   var crsusr = -1;
-  data = await courses.getAllCourses(req, res);
+
+  if (req.query.ld !== undefined && req.query.ld !== "" && req.query.ld=="all") {
+    data = await courses.getAllCourses(req);
+    if(data === undefined || data === null || data.length === 0){
+      error = "No data found";
+    }
+    else {
+      pgdata.docs = data;
+    }     
+  }
+  else{
+    data = await courses.getCourses(req);
+    if(data === undefined || data === null || data.length === 0){
+      error = "No data found";
+    }
+    else {
+      pgdata = JSON.parse(JSON.stringify(data));
+    } 
+  }
   //courses.updAllCourses(req, res); 
   //console.log(data);
-  var error = 0;
-   if(data === undefined || data === null || data.length === 0){
-    error = "No data found";
-  }
 
   if (req.query.adm !== undefined && req.query.adm !== "") {
     crsusr = 0;
@@ -325,7 +355,7 @@ router.get('/courses', async function(req, res, next) {
     userdata = await users.getWebOnlyUser(req);
   }
   
-  res.render('courses/courses', { title: 'Courses', courses:true, prntcourses:true, custom:"courses/courses", items: data, userdata:userdata, crsusr:crsusr, error: error});
+  res.render('courses/courses', { title: 'Courses', courses:true, prntcourses:true, custom:"courses/courses", items: pgdata, userdata:userdata, crsusr:crsusr, error: error});
 });
 router.get('/coursesview', async function(req, res, next) { 
   if (req.query.id !== undefined && req.query.id !== "") {
@@ -482,13 +512,27 @@ router.post('/upddegree', upload.array('facultyResume', 10), async function(req,
 //#region Institute
 router.get('/institutes', async function(req, res, next) { 
   var data = {};
-  data = await institutes.getAllInstitutes(req, res);
-  //console.log(data);
+  var pgdata = {};
   var error = "";
-  if(data === undefined || data === null || data.length === 0){
-    error = "No data found";
+  if (req.query.ld !== undefined && req.query.ld !== "" && req.query.ld=="all") {
+    data = await institutes.getAllInstitutes(req);
+    if(data === undefined || data === null || data.length === 0){
+      error = "No data found";
+    }
+    else {
+      pgdata.docs = data;
+    }     
   }
-  res.render('institutes/institutes', { title: 'Institutes', institutes:true, prntinstitutes:true, custom:"institutes/institutes", items: data, error: error});
+  else{
+    data = await institutes.getInstitutes(req);
+    if(data === undefined || data === null || data.length === 0){
+      error = "No data found";
+    }
+    else {
+      pgdata = JSON.parse(JSON.stringify(data));
+    } 
+  } 
+  res.render('institutes/institutes', { title: 'Institutes', institutes:true, prntinstitutes:true, custom:"institutes/institutes", items: pgdata, error: error});
 });
 router.get('/institutesview', async function(req, res, next) { 
   if (req.query.id !== undefined && req.query.id !== "") {

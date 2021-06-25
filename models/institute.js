@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 var institute = new Schema({
     instituteType: String,
@@ -18,8 +18,10 @@ var institute = new Schema({
     instituteWhatsAppNumber: String,
     faculty: Array,
     instituteMarkOfDistinction: String,
+    status: Number,  
+    creation_date: String,
 },
     { timestamps: true }
-)
-
+);
+institute.plugin(mongoosePaginate);
 module.exports = mongoose.model('institute', institute);

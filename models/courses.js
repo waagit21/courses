@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 var courses=new Schema({
   
@@ -58,5 +58,5 @@ var courses=new Schema({
     updatedby: String
 
 }, {collection: 'courses'});
-
+courses.plugin(mongoosePaginate);
 module.exports = mongoose.model('courses', courses);

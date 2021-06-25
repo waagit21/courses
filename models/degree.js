@@ -1,6 +1,7 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 var degree = new Schema({
 
@@ -51,7 +52,7 @@ var degree = new Schema({
     updatedby: String
 
 }, {collection: 'courses'});
-
+degree.plugin(mongoosePaginate);
 module.exports = mongoose.model('degree', degree);
 
 
