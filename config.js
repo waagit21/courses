@@ -10,12 +10,12 @@ connectDB=async()=>{
       mongoose.set('useNewUrlParser', true);
       mongoose.set('useFindAndModify', false);
       mongoose.set('useCreateIndex', true);
-      await mongoose.connect(
-        "mongodb+srv://BabarKhan:babar123@cluster0.xikk7.mongodb.net/CourseDb?retryWrites=true&w=majority",options
-      )
       // await mongoose.connect(
-      //   "mongodb+srv://course:zpCFJE8mq3Uk9y05@cluster0.jlhhi.mongodb.net/coursedb?retryWrites=true&w=majority",options
+      //   "mongodb+srv://BabarKhan:babar123@cluster0.xikk7.mongodb.net/CourseDb?retryWrites=true&w=majority",options
       // )
+      await mongoose.connect(
+        "mongodb+srv://course:zpCFJE8mq3Uk9y05@cluster0.jlhhi.mongodb.net/coursedb?retryWrites=true&w=majority",options
+      )
       // await mongoose.connect(
       //   "mongodb://localhost:27017/classonline",options
       // )
